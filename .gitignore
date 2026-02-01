@@ -10,9 +10,6 @@ out
 .env
 releases
 /src/generated/prisma
-
-/src/generated/prisma
 db
 .git-lap
-
 src
