@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Product {
+  id                String   @id @default(cuid())  // or @default(uuid())
+  name              String
+  code              String   @unique
+  individualPrice   Float    @map("individual_price")
+  wholesalePrice    Float    @map("wholesale_price")
+  category          String
+  quantity          Int      @default(0)
+  openPrice         Boolean  @default(false) @map("open_price")
+  
+  // ADD ONLY THESE SYNC FIELDS:
+  isSynced          Boolean  @default(false) @map("is_synced")
+  serverId          String?  @unique @map("server_id")
+  lastSynced        DateTime? @map("last_synced")
+  
+  @@map("products")
+}
