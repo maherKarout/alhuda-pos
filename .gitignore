@@ -14,6 +14,5 @@ releases
 /src/generated/prisma
 db
 .git-lap
-src\renderer
-src/renderer
+
 src
