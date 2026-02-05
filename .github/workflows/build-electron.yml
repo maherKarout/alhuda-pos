@@ -3,6 +3,8 @@ name: Build Electron App
 on:
   push:
     branches: [dev]
+  pull_request:
+    branches: [dev]
 
 jobs:
   build:
@@ -12,23 +14,46 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Setup pnpm (Required!)
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+          
+      # Setup Node.js with pnpm cache
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install
+      # Verify installations
+      - name: Check versions
+        run: |
+          node --version
+          pnpm --version
 
+      # Install dependencies
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Optional: Run tests or linting
+      # - name: Run tests
+      #   run: pnpm test
+
+      # Build steps
       - name: Build frontend
         run: pnpm run build
 
-      - name: Build Electron exe
+      - name: Build Electron
         run: pnpm run electron:build
 
-      - name: Upload exe
+      # Upload the built application
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: electron-exe
-          path: dist/
+          name: electron-app-windows
+          path: |
+            dist/*.exe
+            dist/*.blockmap
+          retention-days: 7
