@@ -12,6 +12,6 @@ db
 .git-lap
 .dockerignore   
 docker-compose.yml
-.github
+# .github
 dockerfile
 .git-lapp
