@@ -3,32 +3,54 @@ name: Build Electron App
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   build:
     runs-on: windows-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20  # ⚠️ Electron 25+ needs Node 18+, 24 might be too new
           cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client (if using Prisma)
+        run: pnpm prisma generate
+        if: contains(github.event.head_commit.message, 'prisma') || always()
 
       - name: Build frontend
         run: pnpm run build
 
       - name: Build Electron exe
         run: pnpm run electron:build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload exe
+      - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
-          name: electron-exe
-          path: dist/
+          name: electron-app-windows
+          path: |
+            dist/*.exe
+            dist/*.nsis.exe
+            dist/*.msi
+            dist/*.blockmap
+          if-no-files-found: error
+          retention-days: 7
