@@ -1,0 +1,167 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Product {
+  PrismaId              String   @id @default(uuid())
+  id               String    @default(uuid())
+
+  name             String
+  code             String   
+
+  barCode          String?  
+  branchMask       String 
+
+  category         String?
+
+  color            String?
+  company          String?
+  model            String?
+  origin           String?
+  provenance       String?
+  quality          String?
+  unity            String?
+  dim              String?
+
+  currencyGuid     String? 
+  individualPrice  Float    
+  wholesalePrice   Float    
+
+  openPrice        Int      @default(0)
+
+  @@map("products")
+}
+
+// ====================== Customer Table ======================
+model Customer {
+  // Prisma requires a single @id field. 
+  // You can use Int @default(autoincrement()) or String @default(uuid())
+  id String @id @default(uuid())
+
+  // Core ID fields
+  cuGuid  String?
+  accGuid String?
+
+  // Financials
+  // @default(0) matches your Mongoose default
+  balance        Float? @default(0)
+  totalPurchases Float? @default(0)
+
+  // Contact Info (Nullable strings)
+  cuMobile   String?
+  cuPhone1   String?
+  cuPhone2   String?
+  cuStreet   String?
+  cuDistrict String?
+  cuArea     String?
+  cuCity     String?
+  cuCountry  String?
+
+  // Hierarchy / Relations
+  accParentGuid String?
+
+  // Mapped 'branch' (String | POSDocument) to String. 
+  // If 'POSDocument' is a table, this should be: branchId String? and a relation field.
+  branch String?
+
+  // Required Business Logic Fields
+  customerId       String?  @unique // Assuming customerId should be unique
+  name             String
+  numberOfInvoices Int     @default(0)
+  lastInvoices     DateTime?
+
+  // Flags
+  isSync Boolean @default(false)
+
+  // Timestamps (from { timestamps: true })
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Optional: Map to actual table name if needed
+  // @@map("customers")
+}
+
+
+// ====================== Local Order Table ======================
+
+model LocalOrder {    
+  
+  // Order data
+  orderId                    String            @id @default(uuid())
+  totalPrice                 Float
+  orderDiscount              Float               @default(0)
+  approximationDiscountValue Float?             // optional
+  customerOrderId            Boolean             @default(false)
+  
+  paymentMethod              String
+  currency                   String              // GUID
+  status                     OrderStatus         @default(pending)
+  customer                   String              // GUID
+
+  // Relations
+  items                      LocalOrderItem[]    
+  amount                     LocalOrderAmount?  
+
+  @@index([orderId])
+}
+
+model LocalOrderItem {
+  orderId     String
+  order       LocalOrder        @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+
+  productGuid String
+  quantity    Int
+  itemNote    String?           // optional
+
+  // Sync tracking
+  syncStatus  SyncStatus        @default(pending)
+  createdAt   DateTime          @default(now())
+
+  // Composite primary key for uniqueness
+  @@id([orderId, productGuid])
+}
+
+model LocalOrderAmount {
+  orderId   String
+  order     LocalOrder        @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  
+  usd       Float   @default(0)
+  syp       Float   @default(0)
+  
+  createdAt DateTime @default(now())
+
+  @@id([orderId])
+}
+
+// ====================== CasherBox Table ======================
+model CasherBox {
+  id String @id @default(uuid())
+  usd Float @default(0)
+  syp Float @default(0)
+  exchangeRate Float @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Enums
+enum OrderStatus {
+  pending
+  paid
+  cancelled
+  refunded
+}
+
+enum SyncStatus {
+  pending
+  syncing
+  synced
+  failed
+  conflict
+}

@@ -1,0 +1,8 @@
+-- CreateTable
+CREATE TABLE "CasherBox" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "usd" REAL NOT NULL DEFAULT 0,
+    "syp" REAL NOT NULL DEFAULT 0,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);

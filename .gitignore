@@ -1,0 +1,17 @@
+node_modules
+dist
+out
+.DS_Store
+.eslintcache
+*.log*
+.env
+releases
+/src/generated/prisma
+/db
+db
+.git-lap
+.dockerignore   
+docker-compose.yml
+.github
+dockerfile
+.git-lapp

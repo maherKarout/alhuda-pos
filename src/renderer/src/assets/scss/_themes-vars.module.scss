@@ -1,0 +1,178 @@
+// paper & background
+$paper: #ffffff; // Pure white for backgrounds in light mode
+$default: #f5f7fa; // Off-white for subtle background variations
+
+// primary - Blue scale based on the provided color palette
+$primary25: #f5f8ff;
+$primary50: #eff4ff;
+$primary100: #d1e0ff;
+$primary200: #b2ccff;
+$primary300: #84adff;
+$primary400: #528bff;
+$primaryMain: #2970ff; // Main primary color
+$primaryLight: #d1e0ff; // Very light primary for subtle accents
+$primaryDark: #155eef; // Darker primary for hover states
+$primary700: #1849a9;
+$primary800: #194185;
+$primary900: #102a5e;
+
+// secondary - A sophisticated and warm grey-blue
+$secondaryLight: #e0e4eb; // Very light secondary
+$secondaryMain: #6a7f9e; // Main secondary color, good for less emphasized elements
+$secondaryDark: #455a73; // Darker secondary for contrast
+$secondary200: #b7c3d3; // Lighter secondary shade
+$secondary800: #303f54; // Darker secondary shade
+
+// success Colors - A fresh and clear green
+$successLight: #dfffe9;
+$success200: #9eeba7;
+$successMain: #4caf50; // Standard green for success messages
+$successDark: #2e7d32;
+
+// error - A strong and clear red
+$errorLight: #ffdfde;
+$errorMain: #d32f2f; // Standard red for error messages
+$errorDark: #9a0007;
+
+// orange - A vibrant, accessible orange
+$orangeLight: #fff3e0;
+$orangeMain: #ff9800;
+$orangeDark: #e65100;
+
+// warning - A bright, attention-grabbing yellow
+$warningLight: #fffde7;
+$warningMain: #ffc107;
+$warningDark: #ff8f00;
+
+// grey - A neutral and extensive grey scale based on the provided color palette
+$grey25: #fcfcfd;
+$grey50: #f9fafb;
+$grey100: #f2f4f7;
+$grey200: #eaecf0;
+$grey300: #d0d5dd;
+$grey400: #98a2b3;
+$grey500: #667085;
+$grey600: #475467;
+$grey700: #344054;
+$grey800: #1d2939;
+$grey900: #101828;
+
+// ==============================|| DARK THEME VARIANTS ||============================== //
+
+// paper & background - Updated for better dark theme using the color palette
+$darkBackground: #101828; // Using grey900 for deeper dark background
+$darkPaper: #1d2939; // Using grey800 for dark paper
+
+// dark levels using the new grey scale
+$darkLevel1: #344054; // Using grey700 for subtle variation
+$darkLevel2: #475467; // Using grey600 for lighter dark elements
+
+// primary dark - Adjusted for dark mode using the blue color palette
+$darkPrimaryLight: #84adff; // Using primary300 for contrast on dark backgrounds
+$darkPrimaryMain: #2970ff; // Same main primary for consistency
+$darkPrimaryDark: #155eef; // Using primaryDark for accents in dark mode
+$darkPrimary200: #b2ccff; // Using primary200 for lighter shade in dark mode
+$darkPrimary800: #194185; // Using primary800 for darker shade in dark mode
+
+// secondary dark - Adjusted for dark mode using grey scale
+$darkSecondaryLight: #d0d5dd; // Using grey300 for contrast on dark backgrounds
+$darkSecondaryMain: #98a2b3; // Using grey400 for main secondary
+$darkSecondaryDark: #667085; // Using grey500 for darker secondary
+$darkSecondary200: #eaecf0; // Using grey200 for lighter shade in dark mode
+$darkSecondary800: #475467; // Using grey600 for darker shade in dark mode
+
+// text variants - Optimized for dark backgrounds using the grey scale
+$darkTextTitle: #f2f4f7; // Using grey100 for titles - high contrast
+$darkTextPrimary: #d0d5dd; // Using grey300 for main body text
+$darkTextSecondary: #98a2b3; // Using grey400 for secondary text or subtle labels
+
+// ==============================|| JAVASCRIPT ||============================== //
+
+:export {
+  // paper & background
+  paper: $paper;
+  default: $default;
+  // primary - including all new primary colors
+  primary25: $primary25;
+  primary50: $primary50;
+  primary100: $primary100;
+  primary200: $primary200;
+  primary300: $primary300;
+  primary400: $primary400;
+  primaryLight: $primaryLight;
+  primaryMain: $primaryMain;
+  primaryDark: $primaryDark;
+  primary700: $primary700;
+  primary800: $primary800;
+  primary900: $primary900;
+
+  // secondary
+  secondaryLight: $secondaryLight;
+  secondary200: $secondary200;
+  secondaryMain: $secondaryMain;
+  secondaryDark: $secondaryDark;
+  secondary800: $secondary800;
+
+  // success
+  successLight: $successLight;
+  success200: $success200;
+  successMain: $successMain;
+  successDark: $successDark;
+
+  // error
+  errorLight: $errorLight;
+  errorMain: $errorMain;
+  errorDark: $errorDark;
+
+  // orange
+  orangeLight: $orangeLight;
+  orangeMain: $orangeMain;
+  orangeDark: $orangeDark;
+
+  // warning
+  warningLight: $warningLight;
+  warningMain: $warningMain;
+  warningDark: $warningDark;
+
+  // grey - including all new grey colors
+  grey25: $grey25;
+  grey50: $grey50;
+  grey100: $grey100;
+  grey200: $grey200;
+  grey300: $grey300;
+  grey400: $grey400;
+  grey500: $grey500;
+  grey600: $grey600;
+  grey700: $grey700;
+  grey800: $grey800;
+  grey900: $grey900;
+
+  // ==============================|| DARK THEME VARIANTS ||============================== //
+
+  // paper & background
+  darkPaper: $darkPaper;
+  darkBackground: $darkBackground;
+
+  // dark 800 & 900
+  darkLevel1: $darkLevel1;
+  darkLevel2: $darkLevel2;
+
+  // text variants
+  darkTextTitle: $darkTextTitle;
+  darkTextPrimary: $darkTextPrimary;
+  darkTextSecondary: $darkTextSecondary;
+
+  // primary dark
+  darkPrimaryLight: $darkPrimaryLight;
+  darkPrimaryMain: $darkPrimaryMain;
+  darkPrimaryDark: $darkPrimaryDark;
+  darkPrimary200: $darkPrimary200;
+  darkPrimary800: $darkPrimary800;
+
+  // secondary dark
+  darkSecondaryLight: $darkSecondaryLight;
+  darkSecondaryMain: $darkSecondaryMain;
+  darkSecondaryDark: $darkSecondaryDark;
+  darkSecondary200: $darkSecondary200;
+  darkSecondary800: $darkSecondary800;
+}
