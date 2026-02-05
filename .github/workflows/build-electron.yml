@@ -14,46 +14,45 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Setup pnpm (Required!)
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10
 
-      # Setup Node.js with pnpm cache
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: 'pnpm'
 
-      # Verify installations
-      - name: Check versions
-        run: |
-          node --version
-          pnpm --version
-
-      # Install dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # Optional: Run tests or linting
-      # - name: Run tests
-      #   run: pnpm test
-
-      # Build steps
       - name: Build frontend
         run: pnpm run build
 
       - name: Build Electron
         run: pnpm run build:win
 
-      # Upload the built application
+      # Optional: Debug what was built
+      - name: Check releases folder
+        run: |
+          echo "=== Checking releases folder ==="
+          if (Test-Path releases) {
+            Get-ChildItem -Path releases -Recurse | Format-Table Name, FullName, Length
+          } else {
+            echo "ERROR: releases folder not found!"
+            echo "Checking current directory:"
+            Get-ChildItem | Format-Table Name, Mode
+          }
+
+      # ✅ FIXED: Upload from releases folder
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: electron-app-windows
           path: |
-            dist/*.exe
-            dist/*.blockmap
+            releases/**/*.exe
+            releases/**/*.blockmap
+            releases/**/*.msi
           retention-days: 7
