@@ -18,8 +18,8 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 8
-          
+          version: 10
+
       # Setup Node.js with pnpm cache
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -35,7 +35,7 @@ jobs:
 
       # Install dependencies
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       # Optional: Run tests or linting
       # - name: Run tests
@@ -46,7 +46,7 @@ jobs:
         run: pnpm run build
 
       - name: Build Electron
-        run: pnpm run electron:build
+        run: pnpm run build:win
 
       # Upload the built application
       - name: Upload artifacts
