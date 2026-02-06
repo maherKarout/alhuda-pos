@@ -9,129 +9,25 @@ directories:
   buildResources: build
 
 files:
-  # Only include the out folder and package.json
   - 'out/**'
   - 'package.json'
-  - 'resources/**'
-
-  # Include Prisma schema and generated client
+  # Explicitly force these into the ASAR, overriding the prune
+  - '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}'
   - 'prisma/schema.prisma'
-  - 'node_modules/.prisma/**'
-  - 'node_modules/@prisma/client/**'
-  - 'node_modules/prisma/**'
-
-  # Include native modules for SQLite (if using better-sqlite3)
-  - 'node_modules/better-sqlite3/**'
-
-  # Exclude all other folders and files
-  - '!src/**'
-  - '!dist/**'
-  - '!releases/**'
-  - '!sqlite.db'
-  - '!**/.vscode/**'
-  - '!electron.vite.config.{js,ts,mjs,cjs}'
-  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
-  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
-  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
-
-# Unpack native modules from asar (required for native binaries to work)
-asarUnpack:
-  - 'node_modules/better-sqlite3/**/*'
-  - 'node_modules/@prisma/client/**/*'
-  - 'node_modules/@prisma/client-runtime-utils/**/*'
+  # Make sure we grab the hidden .prisma folder
   - 'node_modules/.prisma/**/*'
+  - 'node_modules/@prisma/client/**/*'
 
-# Extra resources to copy alongside the app (outside asar)
+# Only unpack the binary executable so the OS can run it.
+# Keep the JS files inside the ASAR.
+asarUnpack:
+  - 'node_modules/.prisma/client/query-engine-*.exe'
+  - 'node_modules/.prisma/client/*.dll.node'
+
+# Remove the incorrect "client" copy from here.
+# Only copy the migrations or schema if needed for runtime checks.
 extraResources:
   - from: prisma/schema.prisma
     to: prisma/schema.prisma
   - from: prisma/migrations
     to: prisma/migrations
-  # Copy generated Prisma client that we place under @prisma/client/.prisma
-  - from: node_modules/@prisma/client/.prisma/client
-    to: .prisma/client
-
-win:
-  executableName: AlHudaPOS
-  icon: build/icon.ico
-  target:
-    - target: nsis
-      arch:
-        - x64
-
-nsis:
-  artifactName: ${productName}-Setup-${version}-${arch}.${ext}
-  shortcutName: ${productName}
-  uninstallDisplayName: ${productName}
-  createDesktopShortcut: always
-  deleteAppDataOnUninstall: true
-
-mac:
-  target:
-    - dmg
-    - zip
-  icon: build/icon.icns
-  category: public.app-category.utilities
-  hardenedRuntime: true
-  entitlements: build/entitlements.mac.plist
-  entitlementsInherit: build/entitlements.mac.plist
-  gatekeeperAssess: false
-  extendInfo:
-    NSCameraUsageDescription: Application requests access to the device's camera.
-    NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
-  notarize: false
-
-dmg:
-  artifactName: ${name}-${version}.${ext}
-
-linux:
-  target:
-    - AppImage
-    - snap
-    - deb
-  maintainer: electronjs.org
-  category: Utility
-
-appImage:
-  artifactName: ${name}-${version}.${ext}
-
-# Rebuild native modules for Electron's Node version
-npmRebuild: true
-
-# Use the correct ABI for native modules
-nodeGypRebuild: false
-
-# Build dependencies from source if needed (helps with native modules)
-buildDependenciesFromSource: false
-
-# Publishing configuration
-# Choose one of the following options:
-
-# Option 1: GitHub Releases (Recommended for open-source projects)
-# publish:
-#   provider: github
-#   owner: your-github-username
-#   repo: your-repo-name
-#   releaseType: release
-
-# Option 2: Generic HTTP Server (for custom server)
-publish:
-  provider: generic
-  url: http://127.0.0.1:5500/
-  # Place your update files at: https://example.com/auto-updates/latest.yml
-  # and https://example.com/auto-updates/YourApp-Setup-1.0.0.exe
-# Option 3: Amazon S3
-# publish:
-#   provider: s3
-#   bucket: your-bucket-name
-#   region: us-east-1
-
-# Option 4: Multiple providers
-# publish:
-#   - provider: github
-#     owner: your-username
-#     repo: your-repo
-#   - provider: generic
-#     url: https://your-server.com/updates
