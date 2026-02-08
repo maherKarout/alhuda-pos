@@ -5,6 +5,7 @@
   "main": "./out/main/index.js",
   "author": "Al Huda",
   "homepage": "https://alhuda.com",
+  "type": "module",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
@@ -18,7 +19,7 @@
     "postinstall": " npx prisma generate electron-builder install-app-deps",
     "copy-prisma": "node scripts/copy-prisma-client.js",
     "build:unpack": "npm run build && npm run copy-prisma && electron-builder --dir",
-    "build:win": "npm run build && electron-builder --win",
+    "build:win": "npm run build && electron-builder --win --publish=never",
     "build:mac": "npm run build && npm run copy-prisma && electron-builder --mac",
     "build:linux": "npm run build && npm run copy-prisma && electron-builder --linux",
     "studio": "npx prisma studio",

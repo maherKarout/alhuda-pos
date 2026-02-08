@@ -1,30 +1,30 @@
-appId: com.alhuda.pos
-productName: Al Huda POS
+# appId: com.alhuda.pos
+# productName: Al Huda POS
 
-# Optional global icon (use platform-specific icons below for best results)
-icon: build/icon
+# # Optional global icon (use platform-specific icons below for best results)
+# icon: build/icon
 
-directories:
-  output: releases
-  buildResources: build
+# directories:
+#   output: releases
+#   buildResources: build
 
-files:
-  - 'out/**'
-  - 'package.json'
-  - 'resources/**'
-  - 'src/generated/client/**/*' # Include your new custom client folder
+# files:
+#   - 'out/**'
+#   - 'package.json'
+#   - 'resources/**'
+#   - 'src/generated/client/**/*' # Include your new custom client folder
 
-asarUnpack:
-  - 'node_modules/better-sqlite3/**/*'
-  # Unpack the engine so it can actually run
-  - 'node_modules/.prisma/client/query-engine-*.exe'
-  - 'node_modules/.prisma/client/*.dll.node'
+# asarUnpack:
+#   - 'node_modules/better-sqlite3/**/*'
+#   # Unpack the engine so it can actually run
+#   - 'node_modules/.prisma/client/query-engine-*.exe'
+#   - 'node_modules/.prisma/client/*.dll.node'
 
-extraResources:
-  - from: prisma/schema.prisma
-    to: prisma/schema.prisma
-  - from: prisma/migrations
-    to: prisma/migrations
+# extraResources:
+#   - from: prisma/schema.prisma
+#     to: prisma/schema.prisma
+#   - from: prisma/migrations
+#     to: prisma/migrations
 
 # files:
 #   - 'out/**'
@@ -49,3 +49,33 @@ extraResources:
 #     to: prisma/schema.prisma
 #   - from: prisma/migrations
 #     to: prisma/migrations
+
+appId: com.alhuda.pos
+productName: Al Huda POS
+
+icon: build/icon
+
+directories:
+  output: releases
+  buildResources: build
+
+files:
+  - 'out/**'
+  - 'package.json'
+  - 'resources/**'
+  - 'prisma/schema.prisma'
+  - 'node_modules/.prisma/**/*'
+  - 'node_modules/@prisma/client/**/*'
+  - '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}'
+
+asarUnpack:
+  # Native modules must be unpacked
+  - 'node_modules/better-sqlite3/**/*'
+  - 'node_modules/.prisma/client/query-engine-*.exe'
+  - 'node_modules/.prisma/client/*.dll.node'
+
+extraResources:
+  - from: prisma/schema.prisma
+    to: prisma/schema.prisma
+  - from: prisma/migrations
+    to: prisma/migrations
