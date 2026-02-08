@@ -11,23 +11,41 @@ directories:
 files:
   - 'out/**'
   - 'package.json'
-  # Explicitly force these into the ASAR, overriding the prune
-  - '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}'
-  - 'prisma/schema.prisma'
-  # Make sure we grab the hidden .prisma folder
-  - 'node_modules/.prisma/**/*'
-  - 'node_modules/@prisma/client/**/*'
+  - 'resources/**'
+  - 'src/generated/client/**/*' # Include your new custom client folder
 
-# Only unpack the binary executable so the OS can run it.
-# Keep the JS files inside the ASAR.
 asarUnpack:
+  - 'node_modules/better-sqlite3/**/*'
+  # Unpack the engine so it can actually run
   - 'node_modules/.prisma/client/query-engine-*.exe'
   - 'node_modules/.prisma/client/*.dll.node'
 
-# Remove the incorrect "client" copy from here.
-# Only copy the migrations or schema if needed for runtime checks.
 extraResources:
   - from: prisma/schema.prisma
     to: prisma/schema.prisma
   - from: prisma/migrations
     to: prisma/migrations
+
+# files:
+#   - 'out/**'
+#   - 'package.json'
+#   # Explicitly force these into the ASAR, overriding the prune
+#   - '!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}'
+#   - 'prisma/schema.prisma'
+#   # Make sure we grab the hidden .prisma folder
+#   - 'node_modules/.prisma/**/*'
+#   - 'node_modules/@prisma/client/**/*'
+
+# # Only unpack the binary executable so the OS can run it.
+# # Keep the JS files inside the ASAR.
+# asarUnpack:
+#   - 'node_modules/.prisma/client/query-engine-*.exe'
+#   - 'node_modules/.prisma/client/*.dll.node'
+
+# # Remove the incorrect "client" copy from here.
+# # Only copy the migrations or schema if needed for runtime checks.
+# extraResources:
+#   - from: prisma/schema.prisma
+#     to: prisma/schema.prisma
+#   - from: prisma/migrations
+#     to: prisma/migrations
