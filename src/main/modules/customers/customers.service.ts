@@ -231,13 +231,15 @@ export class CustomersService {
       const totalPages = Math.ceil(totalRecords / limit) || 1
 
       for (let page = 1; page <= totalPages; page++) {
-        const data = page === 1 ? firstData : (await axios.get(
-          `${baseUrlElectron}${endPoints.customersEndPoint().pathname}`,
-          {
-            params: { page, limit },
-            headers: { Authorization: `Bearer ${token}` }
-          }
-        )).data?.data ?? []
+        const data =
+          page === 1
+            ? firstData
+            : ((
+                await axios.get(`${baseUrlElectron}${endPoints.customersEndPoint().pathname}`, {
+                  params: { page, limit },
+                  headers: { Authorization: `Bearer ${token}` }
+                })
+              ).data?.data ?? [])
 
         if (data.length === 0) continue
 

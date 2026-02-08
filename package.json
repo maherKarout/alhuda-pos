@@ -1,11 +1,10 @@
 {
   "name": "alhuda-pos-app",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "description": "Al Huda Point of Sale System",
   "main": "./out/main/index.js",
   "author": "Al Huda",
   "homepage": "https://alhuda.com",
-  "type": "module",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
@@ -15,8 +14,8 @@
     "start": "electron-vite preview",
     "dev": "electron-vite dev --debug",
     "dev:web": "vite --host --config vite.renderer.config.ts",
-    "build": "npm run typecheck && electron-vite build",
-    "postinstall": " npx prisma generate electron-builder install-app-deps",
+    "build": "prisma generate && prisma migrate && npm run typecheck && electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
     "copy-prisma": "node scripts/copy-prisma-client.js",
     "build:unpack": "npm run build && npm run copy-prisma && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win --publish=never",
