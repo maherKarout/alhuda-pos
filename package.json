@@ -1,6 +1,6 @@
 {
   "name": "alhuda-pos-app",
-  "version": "1.0.29",
+  "version": "1.0.30",
   "description": "Al Huda Point of Sale System",
   "main": "./out/main/index.js",
   "author": "Al Huda",

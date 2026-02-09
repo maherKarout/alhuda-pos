@@ -30,9 +30,9 @@ export function initializeApp(): void {
   // This method will be called when Electron has finished initialization.
   app.whenReady().then(() => {
     // In production, ensure the database is set up before creating windows.
-    if (app.isPackaged) {
-      ensureDatabaseExists()
-    }
+    // if (app.isPackaged) {
+    ensureDatabaseExists()
+    // }
     // Set up Electron utilities
     electronApp.setAppUserModelId(APP_CONFIG.appUserModelId)
 

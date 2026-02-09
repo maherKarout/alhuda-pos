@@ -56,6 +56,6 @@ jobs:
           name: electron-app-windows
           path: |
             releases/**/*.exe
-            releases/**/*.blockmap
-            releases/**/*.msi
+            # releases/**/*.blockmap
+            # releases/**/*.msi
           retention-days: 7
