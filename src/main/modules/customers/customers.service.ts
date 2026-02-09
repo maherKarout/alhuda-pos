@@ -1,8 +1,8 @@
 import type { Customer } from '../../../generated/prisma/client'
 import { prisma } from '../../prisma/client'
-import axios from 'axios'
 import { baseUrlElectron } from '../../../shared/endpoints'
 import { endPoints } from '../../../shared/endpoints'
+import axios from 'axios'
 
 /** DTO/view type; for DB entity use Prisma's Customer from @prisma/client */
 export type CustomerType = {
