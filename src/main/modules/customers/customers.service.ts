@@ -1,4 +1,4 @@
-import type { Customer } from '@prisma/client'
+import type { Customer } from '../../../generated/prisma/client'
 import { prisma } from '../../prisma/client'
 import axios from 'axios'
 import { baseUrlElectron } from '../../../shared/endpoints'

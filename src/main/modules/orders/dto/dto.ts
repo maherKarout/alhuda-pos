@@ -1,4 +1,4 @@
-import type { OrderStatus } from '@prisma/client'
+import type { OrderStatus } from '../../../../generated/prisma/client'
 
 /** Input for creating a local order (what the renderer sends). Use this with createLocalOrder. */
 export type CreateLocalOrderInput = {
