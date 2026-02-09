@@ -3,6 +3,7 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { registerAllIpc } from './ipc'
 import { createMainWindow, getMainWindow } from './window/main-window'
 import { APP_CONFIG } from './config/app-config'
+import { ensureDatabase } from './prisma/check-db-exist'
 
 /**
  * Initialize single instance lock and app lifecycle events
@@ -28,6 +29,10 @@ export function initializeApp(): void {
 
   // This method will be called when Electron has finished initialization.
   app.whenReady().then(() => {
+    // In production, ensure the database is set up before creating windows.
+    if (app.isPackaged) {
+      ensureDatabase()
+    }
     // Set up Electron utilities
     electronApp.setAppUserModelId(APP_CONFIG.appUserModelId)
 

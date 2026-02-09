@@ -15,7 +15,7 @@
     "dev": "electron-vite dev --debug",
     "dev:web": "vite --host --config vite.renderer.config.ts",
     "build": "prisma generate && prisma migrate && npm run typecheck && electron-vite build",
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps && prisma generate",
     "copy-prisma": "node scripts/copy-prisma-client.js",
     "build:unpack": "npm run build && npm run copy-prisma && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win --publish=never",
