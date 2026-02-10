@@ -28,11 +28,13 @@ export function initializeApp(): void {
   })
 
   // This method will be called when Electron has finished initialization.
-  app.whenReady().then(() => {
-    // In production, ensure the database is set up before creating windows.
-    // if (app.isPackaged) {
-    ensureDatabaseExists()
-    // }
+  app.whenReady().then(async () => {
+    // In production, ensure the database file exists and
+    // DATABASE_URL is set before any Prisma usage.
+    if (app.isPackaged) {
+      console.log('App is packaged, ensuring database exists...')
+      await ensureDatabaseExists()
+    }
     // Set up Electron utilities
     electronApp.setAppUserModelId(APP_CONFIG.appUserModelId)
 

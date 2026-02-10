@@ -1,36 +1,34 @@
-import { execSync } from 'child_process'
 import path from 'path'
 import fs from 'fs'
 import { app } from 'electron'
 
 export async function ensureDatabaseExists() {
-  // 1. Define the path to your SQLite file
-  // Using appData ensures it persists between updates
+  // Only manage DB for packaged app; in dev you can use .env as before.
+  if (!app.isPackaged) {
+    return
+  }
+
+  // 1. Path to userData DB (where the running app will read/write)
   const dbPath = path.join(app.getPath('userData'), 'database.db')
-  const dbUrl = `file:${dbPath}`
-
-  // 2. Set the DATABASE_URL environment variable dynamically
-  process.env.DATABASE_URL = dbUrl
-
-  // 3. Check if the database folder exists (optional but safe)
   const dbDir = path.dirname(dbPath)
+
   if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir, { recursive: true })
   }
 
-  try {
-    // 4. Run the migration
-    // We use the prisma-client path to find the migrations folder
-    const schemaPath = path.join(__dirname, '../../prisma/schema.prisma')
-
-    // This command applies migrations without needing the full Prisma CLI
-    execSync(`npx prisma migrate deploy --schema="${schemaPath}"`, {
-      env: { ...process.env, DATABASE_URL: dbUrl }
-    })
-
-    console.log('Database is ready and migrated.')
-  } catch (error) {
-    console.error('Failed to migrate database:', error)
-    // Handle error (maybe show a dialog to the user)
+  // 2. If DB doesn't exist yet, seed it from the built-in template
+  if (!fs.existsSync(dbPath)) {
+    const templatePath = path.join(process.resourcesPath, 'prisma', 'template.db')
+    if (fs.existsSync(templatePath)) {
+      fs.copyFileSync(templatePath, dbPath)
+      console.log('Database created from template at:', dbPath)
+    } else {
+      console.warn('Template DB not found at:', templatePath)
+    }
   }
+
+  // 3. Point Prisma to this DB
+  const dbUrl = `file:${dbPath}`
+  process.env.DATABASE_URL = dbUrl
+  console.log('DATABASE_URL set to:', dbUrl)
 }

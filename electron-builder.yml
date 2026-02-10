@@ -79,3 +79,6 @@ extraResources:
     to: prisma/schema.prisma
   - from: prisma/migrations
     to: prisma/migrations
+  # Fresh template DB built at build time (no dev data)
+  - from: prisma/template.db
+    to: prisma/template.db
