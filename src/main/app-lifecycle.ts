@@ -1,6 +1,5 @@
 import { app, BrowserWindow } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { registerAllIpc } from './ipc'
 import { createMainWindow, getMainWindow } from './window/main-window'
 import { APP_CONFIG } from './config/app-config'
 import { ensureDatabaseExists } from './prisma/check-db-exist'
@@ -43,7 +42,8 @@ export function initializeApp(): void {
       optimizer.watchWindowShortcuts(window)
     })
 
-    // Register all IPC handlers (products, local-storage, print, auto-updater)
+    // Register all IPC handlers only after DATABASE_URL is set (they use Prisma).
+    const { registerAllIpc } = await import('./ipc')
     registerAllIpc()
 
     // Create the main window

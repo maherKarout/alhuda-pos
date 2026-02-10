@@ -5,22 +5,31 @@ import { app } from 'electron'
 /**
  * Production DB setup:
  * - Dev/CLI keep using .env: file:./db/dev.db
- * - Packaged app uses the built-in template DB under resources/prisma/template.db
- *   (no per-user copy).
+ * - Packaged app copies the read-only template from resources/prisma/template.db
+ *   to a writable per-user path (userData/database.db) when absent, then sets
+ *   DATABASE_URL so Prisma always operates on the writable DB.
  */
-export async function ensureDatabaseExists() {
+export async function ensureDatabaseExists(): Promise<void> {
   if (!app.isPackaged) {
     // In dev, DATABASE_URL comes from .env and points to ./db/dev.db
     return
   }
 
-  // Single DB file shipped with the app (created at build time)
-  const dbPath = path.join(process.resourcesPath, 'prisma', 'template.db')
-  if (!fs.existsSync(dbPath)) {
-    console.warn('Packaged DB not found at:', dbPath)
+  const templatePath = path.join(process.resourcesPath, 'prisma', 'template.db')
+  const userDataDir = app.getPath('userData')
+  const writableDbPath = path.join(userDataDir, 'database.db')
+
+  if (!fs.existsSync(writableDbPath)) {
+    if (!fs.existsSync(templatePath)) {
+      console.warn('Packaged DB template not found at:', templatePath)
+    } else {
+      fs.mkdirSync(userDataDir, { recursive: true })
+      fs.copyFileSync(templatePath, writableDbPath)
+      console.log('[ensureDatabaseExists] Copied template DB to:', writableDbPath)
+    }
   }
 
-  const dbUrl = `file:${dbPath}`
+  const dbUrl = `file:${writableDbPath}`
   process.env.DATABASE_URL = dbUrl
   console.log('[ensureDatabaseExists] DATABASE_URL set to:', dbUrl)
 }

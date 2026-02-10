@@ -25,6 +25,7 @@ function useSynData() {
       }
     } catch (error) {
       console.log('syncProducts error:', error)
+      alert('error in sync data')
     }
   }
 
@@ -46,9 +47,11 @@ function useSynData() {
   async function syncData() {
     setIsSyncing(true)
     try {
+      alert('syncing data...')
       await syncProducts()
       await syncCustomers()
       // await syncOrders()
+      alert('data synced successfully!')
     } finally {
       setIsSyncing(false)
     }

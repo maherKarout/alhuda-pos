@@ -42,8 +42,8 @@ type Props = {
 }
 
 export const useGetAllProducts = (props: Props): UseGetAllProductsResult | any => {
-  // const { isServerOnline } = useAppSelector((state) => state.globalConfig)
-  const isServerOnline = false
+  const { isServerOnline } = useAppSelector((state) => state.globalConfig)
+  // const isServerOnline = false
 
   // Always call RTK Query hook (it will be skipped when offline)
   const queryResult = useGetAllProductsWithPaginationQuery(props, {

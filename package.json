@@ -1,6 +1,6 @@
 {
   "name": "alhuda-pos-app",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Al Huda Point of Sale System",
   "main": "./out/main/index.js",
   "author": "Al Huda",
@@ -20,7 +20,7 @@
     "postinstall": "electron-builder install-app-deps && prisma generate",
     "copy-prisma": "node scripts/copy-prisma-client.js",
     "build:unpack": "npm run build:db-template && npm run build && npm run copy-prisma && electron-builder --dir",
-    "build:win": "npm run build:db-template &&  electron-builder --win --publish=never",
+    "build:win": "npm run build:db-template && electron-builder --win --publish=never",
     "build:mac": "npm run build:db-template && npm run build && npm run copy-prisma && electron-builder --mac",
     "build:linux": "npm run build:db-template && npm run build && npm run copy-prisma && electron-builder --linux",
     "studio": "npx prisma studio",
