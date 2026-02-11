@@ -82,3 +82,6 @@ extraResources:
   # Fresh template DB built at build time (no dev data)
   - from: prisma/template.db
     to: prisma/template.db
+  # Env so main process has VITE_API_* at runtime in production
+  - from: .env
+    to: .env

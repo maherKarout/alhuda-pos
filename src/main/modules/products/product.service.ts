@@ -113,20 +113,46 @@ export class ProductService {
       }
     }
   }
+  // ====================== Map API product to Prisma schema ======================
+  private mapProductToPrisma(p: ProductType) {
+    return {
+      id: p.id,
+      name: p.name,
+      code: p.code,
+      barCode: p.barCode,
+      branchMask: p.branchMask,
+      category: p.category,
+      color: p.color,
+      company: p.company,
+      model: p.model,
+      origin: p.origin,
+      provenance: p.provenance,
+      quality: p.quality,
+      unity: p.unity,
+      dim: p.dim,
+      currencyGuid: p.currencyGuid,
+      individualPrice: p.individualPrice,
+      wholesalePrice: p.wholesalePrice,
+      openPrice: p.openPrice || 0
+    }
+  }
+
   // ====================== Get all products for first launch app ======================
-  async getAllProductsForFirtsLaunchFromOnlineServer(token: string) {
-    const productsCount = (await this.getProductsCount()) ?? 0
-    if (productsCount.data && productsCount.data > 0) {
+  async getAllProductsForFirtsLaunchFromOnlineServer(
+    token: string
+  ): Promise<{ success: boolean; insertedCount?: number; error?: string }> {
+    const productsCount = await this.getProductsCount()
+    if (productsCount.data != null && productsCount.data > 0) {
       console.log(
         '🚀 ~ ProductService ~ getAllProductsForFirtsLaunchFromOnlineServer ~ productsCount:',
         productsCount?.error
       )
-      return
+      return { success: true, insertedCount: 0 }
     }
     try {
       const limit = 100
       let page = 1
-      let allProducts: ProductType[] = []
+      let totalInserted = 0
       let totalRecords = 0
 
       // 🔹 First request (gets data + totalRecords)
@@ -143,14 +169,13 @@ export class ProductService {
       const firstData = firstResponse.data.data as ProductType[]
       totalRecords = firstResponse.data.totalRecords
 
-      allProducts.push(...firstData)
+      const cleanedFirst = firstData.map((p) => this.mapProductToPrisma(p))
+      const firstResult = await prisma.product.createMany({ data: cleanedFirst })
+      totalInserted += firstResult.count
 
       // 🔹 Calculate how many pages we need
       const totalPages = Math.ceil(totalRecords / limit)
 
-      console.log(
-        '🚀 ~ ProductService ~ getAllProductsForFirtsLaunchFromOnlineServer ~ cleanedProducts:'
-      )
       // 🔹 Fetch remaining pages
       for (page = 2; page <= totalPages; page++) {
         console.log(
@@ -166,46 +191,22 @@ export class ProductService {
             }
           }
         )
-        // 1. Clean data to match Prisma schema exactly
-        const cleanedProducts = response.data.data.map((p) => ({
-          id: p.id,
-          name: p.name,
-          code: p.code,
-          barCode: p.barCode,
-          branchMask: p.branchMask,
-          category: p.category,
-          color: p.color,
-          company: p.company,
-          model: p.model,
-          origin: p.origin,
-          provenance: p.provenance,
-          quality: p.quality,
-          unity: p.unity,
-          dim: p.dim,
-          currencyGuid: p.currencyGuid,
-          individualPrice: p.individualPrice,
-          wholesalePrice: p.wholesalePrice,
-          openPrice: p.openPrice || 0
-        }))
+        const cleanedProducts = response.data.data.map((p: ProductType) =>
+          this.mapProductToPrisma(p)
+        )
         const result = await prisma.product.createMany({
           data: cleanedProducts
         })
-        // allProducts.push(...response.data.data)
+        totalInserted += result.count
       }
 
-      // 2. Use the cleaned data
-
-      // console.log(
-      //   '🚀 ~ ProductService ~ getAllProductsForFirtsLaunchFromOnlineServer ~ result:',
-      //   result
-      // )
+      return { success: true, insertedCount: totalInserted }
     } catch (error) {
-      // console.log(
-      //   '🚀 ~ ProductService ~ getAllProductsForFirtsLaunchFromOnlineServer ~ error:',
-      //   error
-      // )
       console.error('Full error:', JSON.stringify(error, null, 2))
-      // throw error
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : String(error)
+      }
     }
   }
 }

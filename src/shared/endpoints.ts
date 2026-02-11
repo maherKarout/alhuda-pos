@@ -1,4 +1,12 @@
-import 'dotenv/config'
+import { app } from 'electron'
+import path from 'path'
+import { config as dotenvConfig } from 'dotenv'
+
+if (app.isPackaged && process.resourcesPath) {
+  dotenvConfig({ path: path.join(process.resourcesPath, '.env') })
+} else {
+  dotenvConfig()
+}
 
 export const baseUrlElectron = `${process.env.VITE_API_PROTOCOL ?? ''}${process.env.VITE_API_HOST ?? ''}${
   process.env.VITE_API_PORT ?? ''

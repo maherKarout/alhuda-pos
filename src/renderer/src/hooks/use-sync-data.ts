@@ -19,8 +19,8 @@ function useSynData() {
         return
       }
       const result = await window.api.getAllProductsForFirtsLaunchFromOnlineServer(token)
-      if (result?.success && result.data) {
-        window.api.addProductsToDatabase(result.data)
+      console.log('🚀 ~ syncProducts ~ result:', result)
+      if (result?.success) {
         dispatch(setLastSyncedDate(new Date()))
       }
     } catch (error) {

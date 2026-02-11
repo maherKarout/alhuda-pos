@@ -18,8 +18,7 @@ export function registerProductsIpc(): void {
     IpcChannels.GET_PRODUCTS_FOR_FIRST_LAUNCH_FROM_ONLINE_SERVER,
     async (_, token: string) => {
       try {
-        const result = await productService.getAllProductsForFirtsLaunchFromOnlineServer(token)
-        return { success: true, data: result }
+        return await productService.getAllProductsForFirtsLaunchFromOnlineServer(token)
       } catch (error) {
         return { success: false, error: error instanceof Error ? error.message : String(error) }
       }
