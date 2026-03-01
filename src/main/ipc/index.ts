@@ -4,16 +4,16 @@
  */
 import { registerProductsIpc } from '../modules/products/products-ipc'
 import { registerLocalStorageIpc } from '../modules/local-storage/local-storage-ipc'
-import { registerPrintIpc } from '../modules/print/print-ipc'
 import { registerAutoUpdaterIpc } from '../modules/auto-updater/auto-updater-ipc'
 import { registerCustomersIpc } from '../modules/customers/customers-ipc'
 import { registerOrdersIpc } from '../modules/orders/orders-ipc'
 import { registerCasherBoxIpc } from '../modules/casher-box/casher-box-ipc'
+import { registerPrintPdfIpc } from '../modules/print-pdf/print-pdf-ipc'
 
 export function registerAllIpc(): void {
   registerProductsIpc()
   registerLocalStorageIpc()
-  registerPrintIpc()
+  registerPrintPdfIpc()
   registerAutoUpdaterIpc()
   registerOrdersIpc()
   registerCustomersIpc()
