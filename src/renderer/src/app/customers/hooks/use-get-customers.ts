@@ -45,7 +45,7 @@ const toQueryArg = (props: UseGetAllCustomersProps): ArgsType => ({
 })
 
 export const useGetAllCustomers = (props: UseGetAllCustomersProps): UseGetAllCustomersResult => {
-  const isServerOnline = false
+  const isServerOnline = true
   const queryArg = toQueryArg(props)
 
   const queryResult = useGetAllCustomersQuery(queryArg, {

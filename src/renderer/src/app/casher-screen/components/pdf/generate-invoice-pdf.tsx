@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     fontFamily: 'BalooBhaijaan2',
-    direction: 'rtl', // RTL layout for entire page
+    direction: 'rtl' // RTL layout for entire page
     // width: "200px",
     // height: "200px"
   },
@@ -210,7 +210,7 @@ const InvoicePdfFile = ({ data, labels }: InvoicePdfProps) => {
         {/* <Page size={"LETTER"} style={styles.page} > */}
         {/* Header */}
         <View style={styles.header}>
-          <Image src={logoUrl} style={{ width: 50, height: 50, marginLeft: 10, margin: "auto" }} />
+          <Image src={logoUrl} style={{ width: 50, height: 50, marginLeft: 10, margin: 'auto' }} />
           <Text style={{ fontWeight: 'bold', marginBottom: 4, fontSize: 14 }}>
             {invoiceData.companyArabicName}
           </Text>
@@ -332,14 +332,14 @@ const InvoicePdfFile = ({ data, labels }: InvoicePdfProps) => {
           <Text style={{ ...styles.labelText, fontWeight: 'bold' }}>{invoiceData.totalLabel}</Text>
         </View>
         {/* Balance/Change */}
-        <View style={styles.totalRow}>
+        {/* <View style={styles.totalRow}>
           <Text style={{ ...styles.amountText, fontWeight: 'bold' }}>
             {priceToDecimalPrice(formatAmount(invoiceData.balance || 0))}
           </Text>
           <Text style={{ ...styles.labelText, fontWeight: 'bold' }}>
             {invoiceData.balanceLabel}
           </Text>
-        </View>
+        </View> */}
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={{ fontSize: 9, marginBottom: 2, textAlign: 'center' }}>
@@ -347,7 +347,8 @@ const InvoicePdfFile = ({ data, labels }: InvoicePdfProps) => {
           </Text>
           <Text style={{ fontSize: 9, textAlign: 'center' }}>{invoiceData.visitAgainMessage}</Text>
           <Text style={{ fontSize: 8, marginTop: 4, textAlign: 'center' }}>
-            {invoiceData.printDateLabel}: {formatDate(invoiceData.orderDate)} {formatTime(invoiceData.orderTime)}
+            {invoiceData.printDateLabel}: {formatDate(invoiceData.orderDate)}{' '}
+            {formatTime(invoiceData.orderTime)}
           </Text>
         </View>
       </Page>

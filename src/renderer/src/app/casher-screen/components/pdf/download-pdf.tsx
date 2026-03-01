@@ -15,11 +15,17 @@ function DownloadPdfInvoice() {
     try {
       setIsPrinting(true)
       const blob = await pdf(<InvoicePdfFile data={invoiceData} labels={invoiceLabels} />).toBlob()
+      console.log('🚀 ~ DownloadPdfInvoice ~ blob:', blob)
       const blobUrl = URL.createObjectURL(blob)
+      console.log('🚀 ~ DownloadPdfInvoice ~ blobUrl:', blobUrl)
       const printService = (window as any)?.printPdfFile?.printPdfFile
+      console.log('🚀 ~ DownloadPdfInvoice ~ printService:', printService)
+      console.log(
+        "🚀 ~ DownloadPdfInvoice ~ typeof printService === 'function':",
+        typeof printService === 'function'
+      )
 
       if (typeof printService === 'function') {
-
         await printService(blobUrl)
       } else {
         alert('Electron print service not available, falling back to new window print.')

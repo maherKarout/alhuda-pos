@@ -47,11 +47,11 @@ function useSynData() {
   async function syncData() {
     setIsSyncing(true)
     try {
-      alert('syncing data...')
+      // alert('syncing data...')
       await syncProducts()
       await syncCustomers()
       // await syncOrders()
-      alert('data synced successfully!')
+      // alert('data synced successfully!')
     } finally {
       setIsSyncing(false)
     }

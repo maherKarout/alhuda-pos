@@ -28,18 +28,23 @@ import AddInvoice from '../components/add-invoice/add-invoice'
 function CasherScreen({ canEdit }: ComponentPropsType) {
   const { customer_id_order } = useParams()
   const { t } = useTranslation('translation')
-  const isUpdateCustomerOrder = customer_id_order !== "add-new-order" && customer_id_order !== "" && customer_id_order !== undefined
+  const isUpdateCustomerOrder =
+    customer_id_order !== 'add-new-order' &&
+    customer_id_order !== '' &&
+    customer_id_order !== undefined
 
-  const { data: customerOrderData, isLoading: isLoadingCustomerOrder } = useGetInvoicesByIdQuery(customer_id_order ?? '', {
-    skip: !isUpdateCustomerOrder
-  })
-
+  const { data: customerOrderData, isLoading: isLoadingCustomerOrder } = useGetInvoicesByIdQuery(
+    customer_id_order ?? '',
+    {
+      skip: !isUpdateCustomerOrder
+    }
+  )
 
   const intiValue = structuredClone(initCacherState)
   delete intiValue.setOrders
 
   const [orders, setOrders] = useState<CasherScreenContextType['orders']>(intiValue.orders)
-  console.log("🚀 ~ CasherScreen ~ orders:", orders)
+  console.log('🚀 ~ CasherScreen ~ orders:', orders)
 
   const [allBranches, setAllBranches] = useState(false)
   const [searchText, setSearchText] = useState('')
@@ -49,17 +54,16 @@ function CasherScreen({ canEdit }: ComponentPropsType) {
   const invoiceIdRef = useRef<invoiceDetails | null>(null)
   const [discount, setDiscount] = useState<CasherScreenContextType['discount']>(intiValue.discount)
 
-  // ====================== Update Customer Order Data by id ====================== 
+  // ====================== Update Customer Order Data by id ======================
   useEffect(() => {
     if (customerOrderData) {
-      setOrders(prev => {
+      setOrders((prev) => {
         const newOrders = [...prev]
         newOrders[0] = DtoOrderById(customerOrderData)
         return newOrders
       })
     }
   }, [isLoadingCustomerOrder])
-
 
   // const products = productsData?.data
   const isStepOne = orders[currentOrder]?.currentStep === 0
@@ -94,7 +98,11 @@ function CasherScreen({ canEdit }: ComponentPropsType) {
       {/* <Button onClick={() => window.api.createLocalOrderTest()}>
         Test 
       </Button> */}
-      {isUpdateCustomerOrder && <Typography variant="h3" sx={{ marginBottom: "10px" }}>{t('edit_customer_order')} {customerOrderData?.customerName}</Typography>}
+      {isUpdateCustomerOrder && (
+        <Typography variant="h3" sx={{ marginBottom: '10px' }}>
+          {t('edit_customer_order')} {customerOrderData?.customerName}
+        </Typography>
+      )}
 
       <Grid container spacing={2}>
         <Grid
@@ -118,7 +126,7 @@ function CasherScreen({ canEdit }: ComponentPropsType) {
           <OrderTabs />
           {orders[currentOrder]?.currentStep === 0 && <AddInvoice />}
           {orders[currentOrder]?.currentStep === 1 && <PricingAndCurrency />}
-          {orders[currentOrder]?.currentStep === 2 && (
+          {orders[currentOrder]?.currentStep === 0 && (
             <PaymentSuccessful
               onPrintReceipt={() =>
                 // @ts-ignore
