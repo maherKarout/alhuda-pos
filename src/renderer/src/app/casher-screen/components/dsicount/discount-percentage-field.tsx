@@ -14,10 +14,14 @@ const clamp = (value: number, min: number, max: number) => Math.min(Math.max(val
 
 const getDiscountedValues = (item: ItemType, nextPercentage: number) => {
   const basePrice = item.individualPrice ?? item.price
-  const clampedPercentage = clamp(Number.isFinite(nextPercentage) ? nextPercentage : 0, 0, MAX_DISCOUNT_PERCENTAGE)
+  const clampedPercentage = clamp(
+    Number.isFinite(nextPercentage) ? nextPercentage : 0,
+    0,
+    MAX_DISCOUNT_PERCENTAGE
+  )
 
-  const discountValue = +(basePrice * (clampedPercentage / 100)).toFixed(3)
-  const discountedPrice = +(Math.max(basePrice - discountValue, 0)).toFixed(3)
+  const discountValue = +(basePrice / ((clampedPercentage + 100) / 100)).toFixed(3)
+  const discountedPrice = +Math.max(basePrice - discountValue, 0).toFixed(3)
 
   return {
     percentage: clampedPercentage,
@@ -25,7 +29,6 @@ const getDiscountedValues = (item: ItemType, nextPercentage: number) => {
     discountedPrice
   }
 }
-
 
 function DiscountPercentageField({ item }: DiscountPercentageFieldProps) {
   const { setOrders, currentOrder } = useCasherScreen()
@@ -46,7 +49,10 @@ function DiscountPercentageField({ item }: DiscountPercentageFieldProps) {
           items: currentOrderData.items.map((orderItem) => {
             if (orderItem.id !== item.id) return orderItem
 
-            const { percentage, discountValue, discountedPrice } = getDiscountedValues(orderItem, nextValue)
+            const { percentage, discountValue, discountedPrice } = getDiscountedValues(
+              orderItem,
+              nextValue
+            )
             return {
               ...orderItem,
               price: discountedPrice,
@@ -74,7 +80,10 @@ function DiscountPercentageField({ item }: DiscountPercentageFieldProps) {
   const discountPercentage = item.discountPercentage ?? 0
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }} onClick={(e) => e.stopPropagation()}>
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      onClick={(e) => e.stopPropagation()}
+    >
       <Tooltip
         title={t("You can't add discount more than {{max}}%", { max: MAX_DISCOUNT_PERCENTAGE })}
         placement="top"
@@ -124,7 +133,6 @@ function DiscountPercentageField({ item }: DiscountPercentageFieldProps) {
                 border: 'none'
               }}
             />
-
           </Box>
 
           <Box
@@ -135,7 +143,6 @@ function DiscountPercentageField({ item }: DiscountPercentageFieldProps) {
               height: '100%'
             }}
           >
-
             <IconButton
               size="small"
               onClick={() => handleArrowClick(1)}
@@ -186,10 +193,9 @@ function DiscountPercentageField({ item }: DiscountPercentageFieldProps) {
               <KeyboardArrowDown sx={{ fontSize: 12 }} />
             </IconButton>
           </Box>
-
         </Box>
       </Tooltip>
-    </Box >
+    </Box>
   )
 }
 

@@ -19,6 +19,12 @@ const apiService = api
           url: `${endPoints.configEndPointEndpoint().pathname}`
         })
       }),
+      getConfigForPos: query<configType, void>({
+        providesTags: (result, error, id) => [{ type: 'Config' }],
+        query: () => ({
+          url: `${endPoints.configEndPointForPos().pathname}`
+        })
+      }),
 
       editConfig: mutation<void, configType>({
         invalidatesTags: ['Config'],
@@ -31,4 +37,4 @@ const apiService = api
     })
   })
 
-export const { useGetConfigQuery, useEditConfigMutation } = apiService
+export const { useGetConfigQuery, useEditConfigMutation, useGetConfigForPosQuery } = apiService

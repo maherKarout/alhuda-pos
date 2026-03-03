@@ -327,7 +327,7 @@ const InvoicePdfFile = ({ data, labels }: InvoicePdfProps) => {
         {/* Total */}
         <View style={styles.totalRow}>
           <Text style={{ ...styles.amountText, fontWeight: 'bold' }}>
-            {priceToDecimalPrice(formatAmount(invoiceData.total + invoiceData.discount))}
+            {priceToDecimalPrice(formatAmount(invoiceData.total - invoiceData.discount))}
           </Text>
           <Text style={{ ...styles.labelText, fontWeight: 'bold' }}>{invoiceData.totalLabel}</Text>
         </View>

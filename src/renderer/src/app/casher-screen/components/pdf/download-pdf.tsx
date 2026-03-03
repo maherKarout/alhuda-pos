@@ -8,6 +8,8 @@ import { Print as PrintIcon } from '@mui/icons-material'
 
 function DownloadPdfInvoice() {
   const { invoiceData, invoiceLabels } = useInvoiceData()
+  console.log('🚀 ~ DownloadPdfInvoice ~ invoiceLabels:', invoiceLabels)
+  console.log('🚀 ~ DownloadPdfInvoice ~ invoiceData:', invoiceData)
   const { t } = useTranslation('translation')
   const [isPrinting, setIsPrinting] = useState(false)
 
@@ -15,15 +17,8 @@ function DownloadPdfInvoice() {
     try {
       setIsPrinting(true)
       const blob = await pdf(<InvoicePdfFile data={invoiceData} labels={invoiceLabels} />).toBlob()
-      console.log('🚀 ~ DownloadPdfInvoice ~ blob:', blob)
       const blobUrl = URL.createObjectURL(blob)
-      console.log('🚀 ~ DownloadPdfInvoice ~ blobUrl:', blobUrl)
       const printService = (window as any)?.printPdfFile?.printPdfFile
-      console.log('🚀 ~ DownloadPdfInvoice ~ printService:', printService)
-      console.log(
-        "🚀 ~ DownloadPdfInvoice ~ typeof printService === 'function':",
-        typeof printService === 'function'
-      )
 
       if (typeof printService === 'function') {
         await printService(blobUrl)

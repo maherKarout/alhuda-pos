@@ -126,7 +126,7 @@ function CasherScreen({ canEdit }: ComponentPropsType) {
           <OrderTabs />
           {orders[currentOrder]?.currentStep === 0 && <AddInvoice />}
           {orders[currentOrder]?.currentStep === 1 && <PricingAndCurrency />}
-          {orders[currentOrder]?.currentStep === 0 && (
+          {orders[currentOrder]?.currentStep === 2 && (
             <PaymentSuccessful
               onPrintReceipt={() =>
                 // @ts-ignore

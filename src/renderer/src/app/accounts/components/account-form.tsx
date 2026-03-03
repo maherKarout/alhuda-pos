@@ -1,40 +1,39 @@
-import React, { useRef, useState } from "react";
-import { Grid, Typography, Divider } from "@mui/material";
-import { Formik, FormikHelpers } from "formik";
-import { FormikOnSubmitType, submitType } from "src/types";
-import FileInput from "src/components/formik-input/image-input-editor";
-import OutlinedTextInput from "src/components/formik-input/outlined-text-input";
-import CheckBoxLabel from "src/components/formik-input/check-box-label";
-import { Yup } from "src/validation";
-import GenericButton from "src/components/generic-button";
-import SelectInput from "src/components/formik-input/select-input";
-import { useTranslation } from "react-i18next";
-import BranchesSelector from "./branches-selector";
+import React, { useRef, useState } from 'react'
+import { Grid, Typography, Divider } from '@mui/material'
+import { Formik, FormikHelpers } from 'formik'
+import { FormikOnSubmitType, submitType } from 'src/types'
+import FileInput from 'src/components/formik-input/image-input-editor'
+import OutlinedTextInput from 'src/components/formik-input/outlined-text-input'
+import CheckBoxLabel from 'src/components/formik-input/check-box-label'
+import { Yup } from 'src/validation'
+import GenericButton from 'src/components/generic-button'
+import SelectInput from 'src/components/formik-input/select-input'
+import { useTranslation } from 'react-i18next'
+import BranchesSelector from './branches-selector'
 type propsType = {
-  onSubmit: FormikOnSubmitType<any>;
-  initialValues: any;
-  roleOptions: { key: string; value: string }[];
-  isEdit?: boolean;
-};
+  onSubmit: FormikOnSubmitType<any>
+  initialValues: any
+  roleOptions: { key: string; value: string }[]
+  isEdit?: boolean
+}
 function AccountForm({ onSubmit, initialValues, roleOptions, isEdit }: propsType) {
-  const ref = useRef<any>(null);
-  const { t } = useTranslation("translation");
+  const ref = useRef<any>(null)
+  const { t } = useTranslation('translation')
   const validationSchema = Yup.object({}).shape({
     image: Yup.text({}),
     fullName: Yup.text({ isRequired: true }),
-    password: isEdit ? Yup.text({}) : Yup.password(),
+    // password: isEdit ? Yu  p.text({}) : Yup.password(),
     username: Yup.username(4),
     role: Yup.text({ isRequired: true }),
-    phoneNumber: Yup.phoneNumber(undefined, true),
-
-  });
+    phoneNumber: Yup.phoneNumber(undefined, true)
+  })
   return (
     <Formik
       onSubmit={(values: any, helpers: FormikHelpers<any>) => {
-        (() => {
-          const submitType = ref.current?.nativeEvent.submitter.getAttribute("value") as submitType;
-          onSubmit(values, helpers, submitType);
-        })();
+        ;(() => {
+          const submitType = ref.current?.nativeEvent.submitter.getAttribute('value') as submitType
+          onSubmit(values, helpers, submitType)
+        })()
       }}
       validationSchema={validationSchema}
       initialValues={initialValues}
@@ -43,13 +42,13 @@ function AccountForm({ onSubmit, initialValues, roleOptions, isEdit }: propsType
         return (
           <form
             onSubmit={(e) => {
-              ref.current = e;
-              handleSubmit(e);
+              ref.current = e
+              handleSubmit(e)
             }}
           >
             <Grid container spacing={2}>
               <Grid component="div" size={{ xs: 12 }}>
-                <Typography variant="h4">{t("personal information")}</Typography>
+                <Typography variant="h4">{t('personal information')}</Typography>
               </Grid>
               <Grid component="div" size={{ xs: 12, md: 4 }}>
                 <OutlinedTextInput name="fullName" label="fullName" type="text" />
@@ -61,8 +60,8 @@ function AccountForm({ onSubmit, initialValues, roleOptions, isEdit }: propsType
                 <FileInput
                   name="image"
                   label="image"
-                  accept={"image/*"}
-                  placeholder={" (200*200)"}
+                  accept={'image/*'}
+                  placeholder={' (200*200)'}
                   width={200}
                   height={200}
                 />
@@ -71,7 +70,7 @@ function AccountForm({ onSubmit, initialValues, roleOptions, isEdit }: propsType
                 <Divider />
               </Grid>
               <Grid component="div" size={{ xs: 12 }}>
-                <Typography variant="h4">{t("account information")}</Typography>
+                <Typography variant="h4">{t('account information')}</Typography>
               </Grid>
               <Grid component="div" size={{ xs: 12, md: 4 }}>
                 <OutlinedTextInput name="username" label="userName" type="text" />
@@ -101,10 +100,10 @@ function AccountForm({ onSubmit, initialValues, roleOptions, isEdit }: propsType
               </Grid>
             </Grid>
           </form>
-        );
+        )
       }}
     </Formik>
-  );
+  )
 }
 
-export default AccountForm;
+export default AccountForm

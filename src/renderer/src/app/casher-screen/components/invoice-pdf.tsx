@@ -218,7 +218,8 @@ const InvoicePdf = () => {
           )}
           {invoiceData.discount > 0 && (
             <Typography variant="body2" sx={{ fontSize: '11px', mb: 0.5, color: 'black' }}>
-              {invoiceData.orderDiscountLabel}: {priceToDecimalPrice(formatAmount(invoiceData.discount))}
+              {invoiceData.orderDiscountLabel}:{' '}
+              {priceToDecimalPrice(formatAmount(invoiceData.discount))}
             </Typography>
           )}
           <Typography variant="body2" sx={{ fontSize: '11px', mb: 0.5, color: 'black' }}>
@@ -319,11 +320,11 @@ const InvoicePdf = () => {
               variant="body1"
               sx={{ fontSize: '14px', fontWeight: 'bold', color: 'black' }}
             >
-              {priceToDecimalPrice(formatAmount(invoiceData.total + invoiceData.discount))}
+              {priceToDecimalPrice(formatAmount(invoiceData.total - invoiceData.discount))}
             </Typography>
           </Box>
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+          {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
             <Typography
               variant="body1"
               sx={{ fontSize: '14px', fontWeight: 'bold', color: 'black' }}
@@ -336,7 +337,7 @@ const InvoicePdf = () => {
             >
               {priceToDecimalPrice(formatAmount(invoiceData.balance || 0))}
             </Typography>
-          </Box>
+          </Box> */}
         </Box>
 
         {/* Footer */}
@@ -348,7 +349,8 @@ const InvoicePdf = () => {
             {invoiceData.visitAgainMessage}
           </Typography>
           <Typography variant="body2" sx={{ fontSize: '10px', mt: 0.5, color: 'black' }}>
-            {invoiceData.printDateLabel}: {formatDate(invoiceData.orderDate)} {formatTime(invoiceData.orderTime)}
+            {invoiceData.printDateLabel}: {formatDate(invoiceData.orderDate)}{' '}
+            {formatTime(invoiceData.orderTime)}
           </Typography>
         </Box>
       </Box>

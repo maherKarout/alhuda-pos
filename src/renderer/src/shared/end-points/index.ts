@@ -46,6 +46,7 @@ export const endPoints = {
   sendRefundOrderEndpoint: getEndPoint('/pos/order/refund'),
   inventoryEndPointEndpoint: getEndPoint('/pos/products/inventory'),
   configEndPointEndpoint: getEndPoint('/admin/config'),
+  configEndPointForPos: getEndPoint('/pos/config'),
   customerOrderEndpoint: getEndPoint('/pos/order/customer '),
   allCustomersOrdersEndpoint: getEndPoint('/pos/order/customer/all'),
   orderCustomerInvoiceEndpoint: getEndPoint('/pos/order/customer/invoice')

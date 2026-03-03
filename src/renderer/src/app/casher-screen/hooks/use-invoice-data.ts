@@ -38,9 +38,10 @@ function useInvoiceData(): UseInvoiceDataReturn {
   const { t } = useTranslation('translation')
   const pos = useAppSelector((state: RootState) => state?.auth?.account?.pos)
   const account = useAppSelector((state: RootState) => state?.auth?.account)
-const accountName = account?.fullName ?? account?.username
+  const accountName = account?.fullName ?? account?.username
   // Get order data from casher screen context
   const { orders, currentOrder, ResponseInvoiceDetails, discount } = useCasherScreen()
+  console.log('🚀 ~ useInvoiceData ~ discount:', discount)
   const { data: customersData } = useGetCustomers()
 
   // Get current order data
@@ -61,7 +62,7 @@ const accountName = account?.fullName ?? account?.username
   // Calculate totals using the same logic as AddInvoice
   const orderCalculation = calcTotalAmount(currentOrderData.items, {
     taxAmount: 0, // Fixed tax amount
-    discountAmount:   discount?.amount
+    discountAmount: discount?.amount
   })
 
   // Get current date and time
@@ -83,7 +84,7 @@ const accountName = account?.fullName ?? account?.username
       amount: item.price * item.quantity
     })),
     subtotal: orderCalculation.subtotal,
-    discount: orders[currentOrder]?.orderDiscount??0,
+    discount: orders[currentOrder]?.orderDiscount ?? 0,
     discountPercentage: 0, // Will be updated when discount is implemented
     tax: orderCalculation.taxAmount,
     total: orderCalculation.totalAmount,

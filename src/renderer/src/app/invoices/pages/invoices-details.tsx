@@ -71,7 +71,7 @@ function InvoicesDetails({ canEdit }: ComponentPropsType) {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
           <Box>
             <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-              {t("bill_number")} #{invoicesData?.billNumber}
+              {t('bill_number')} #{invoicesData?.billNumber}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Typography variant="body1" color="text.secondary">
@@ -84,11 +84,7 @@ function InvoicesDetails({ canEdit }: ComponentPropsType) {
               />
             </Box>
           </Box>
-          <Button
-            variant="outlined"
-            startIcon={<Print />}
-            onClick={() => { }}
-          >
+          <Button variant="outlined" startIcon={<Print />} onClick={() => {}}>
             {t('Print Receipt')}
           </Button>
         </Box>
@@ -207,7 +203,8 @@ function InvoicesDetails({ canEdit }: ComponentPropsType) {
                     {t('Total')}
                   </Typography>
                   <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'success.main' }}>
-                    {formatPrice(invoicesData.total)}
+                    {formatPrice(invoicesData.total - invoicesData.disc)}
+                    {/* {invoicesData.total - invoicesData.disc} */}
                   </Typography>
                 </Box>
               </Box>

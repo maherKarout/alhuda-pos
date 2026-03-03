@@ -37,21 +37,19 @@ import PopupConfirmOrderPurchase from '../popup-confirm-order-purchase'
 import AccordionWrapper from './accordion-wrapper'
 import { Percent as PercentIcon } from '@mui/icons-material'
 
-
-
 interface AddInvoiceProps {
   onCustomerSelect?: (customerId: string) => void
 }
 
 const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
-
   const { t } = useTranslation('translation')
   const updateCasherBox = useUpdateCasherBox()
 
   const isUpdateCustomerOrder = useIsUpdateCustomerOrder()
 
   const [openPopupConfirmOrderPurchase, setOpenPopupConfirmOrderPurchase] = useState(false)
-  const [openPopupConfirmRefundOrderPurchase, setOpenPopupRefundConfirmOrderPurchase] = useState(false)
+  const [openPopupConfirmRefundOrderPurchase, setOpenPopupRefundConfirmOrderPurchase] =
+    useState(false)
   const [openPopupRefundOrder, setOpenPopupRefundOrder] = useState(false)
   const [openPopupPayLater, setOpenPopupPayLater] = useState(false)
   const [isRefundMode, setIsRefundMode] = useState(false)
@@ -201,7 +199,9 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
       if (!currentOrderData) return prev
       newOrders[currentOrder] = {
         ...currentOrderData,
-        items: currentOrderData.items.map((item) => item.id === itemId ? { ...item, price: price } : item)
+        items: currentOrderData.items.map((item) =>
+          item.id === itemId ? { ...item, price: price } : item
+        )
       }
       return newOrders
     })
@@ -300,7 +300,6 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
               >
                 {t('Dis')}
                 <PercentIcon sx={{ fontSize: 12, color: 'text.secondary' }} />
-
               </Typography>
               <Typography
                 variant="body2"
@@ -391,8 +390,7 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
                           borderRadius: '9px',
                           width: '40px',
                           height: '30px',
-                          overflow: 'hidden',
-
+                          overflow: 'hidden'
                         }}
                         onClick={(e) => e.stopPropagation()}
                       >
@@ -405,16 +403,21 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
                             justifyContent: 'center',
                             height: '100%',
                             borderRight: '1px solid',
-                            borderColor: 'grey.200',
-
+                            borderColor: 'grey.200'
                           }}
                         >
-                          <input className='quantity-input' onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value), true)} value={item.quantity} style={{
-                            display: "block",
-                            width: "100%",
-                            textAlign: "center",
-
-                          }} />
+                          <input
+                            className="quantity-input"
+                            onChange={(e) =>
+                              handleQuantityChange(item.id, parseInt(e.target.value), true)
+                            }
+                            value={item.quantity}
+                            style={{
+                              display: 'block',
+                              width: '100%',
+                              textAlign: 'center'
+                            }}
+                          />
                         </Box>
 
                         {/* Arrow Controls */}
@@ -423,7 +426,7 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
                             display: 'flex',
                             flexDirection: 'column',
                             width: '15px',
-                            height: '100%',
+                            height: '100%'
                           }}
                         >
                           {/* Up Arrow */}
@@ -472,38 +475,42 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
                         </Box>
                       </Box>
 
-
                       {/* individual price per item */}
                       <Stack
                         direction="row"
                         alignItems="center"
                         sx={{ width: '80px', justifyContent: 'center' }}
                       >
-                        {!item.openPrice ? (<Typography variant="caption" color="text.secondary">
-                          {/* {false ? (<Typography variant="caption" color="text.secondary"> */}
-                          {priceToDecimalPrice(item.price.toString())}
-                        </Typography>) : (
+                        {!item.openPrice ? (
+                          <Typography variant="caption" color="text.secondary">
+                            {/* {false ? (<Typography variant="caption" color="text.secondary"> */}
+                            {priceToDecimalPrice(item.price.toString())}
+                          </Typography>
+                        ) : (
                           <Tooltip title="You can modify price this item" arrow>
                             <TextField
-                              value={priceToDecimalPrice(
-                                item.price?.toString() || '0'
-                              )}
-                              onClick={(e: any) => { e.stopPropagation() }}
+                              value={priceToDecimalPrice(item.price?.toString() || '0')}
+                              onClick={(e: any) => {
+                                e.stopPropagation()
+                              }}
                               onChange={(e) =>
-                                handelChangeIndividualPrice(item.id, decimalPriceToNumber(e.target.value) + '')
+                                handelChangeIndividualPrice(
+                                  item.id,
+                                  decimalPriceToNumber(e.target.value) + ''
+                                )
                               }
                               size="small"
                               sx={{
-                                marginX: "5px",
+                                marginX: '5px',
                                 minWidth: '60px',
                                 '& .MuiInputBase-root': {
                                   paddingRight: '0px !important'
                                 },
                                 '& .MuiInputBase-input': {
-                                  textAlign: "center",
+                                  textAlign: 'center',
                                   fontSize: '12px',
                                   paddingY: '6px !important',
-                                  paddingX: "1px !important",
+                                  paddingX: '1px !important'
                                   // width: `${Math.max(40, (priceToDecimalPrice(item.individualPrice?.toString() || '0').length * 8) + 8)}px`,
                                   // minWidth: '60px'
                                 }
@@ -520,7 +527,6 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
                         <DiscountPercentageField item={item} />
                       </Stack>
 
-
                       {/* Total Price */}
                       {isRefundMode ? (
                         <TextField
@@ -532,14 +538,14 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
                           }
                           size="small"
                           sx={{
-                            marginX: "5px",
+                            marginX: '5px',
                             '& .MuiInputBase-input': {
                               textAlign: 'right',
                               fontSize: '12px',
                               padding: '6px',
-                              paddingX: "3px",
-                              minWidth: "fit-content",
-                              maxWidth: "80px"
+                              paddingX: '3px',
+                              minWidth: 'fit-content',
+                              maxWidth: '80px'
                             }
                           }}
                           type="text"
@@ -559,7 +565,12 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
                       <IconButton
                         size="small"
                         onClick={() => handleRemoveItem(item.id)}
-                        sx={{ width: '24px', height: '24px', color: 'error.main', marginLeft: '5px' }}
+                        sx={{
+                          width: '24px',
+                          height: '24px',
+                          color: 'error.main',
+                          marginLeft: '5px'
+                        }}
                       >
                         <DeleteIcon sx={{ fontSize: 16 }} />
                       </IconButton>
@@ -722,8 +733,6 @@ const AddInvoice: React.FC<AddInvoiceProps> = ({ onCustomerSelect }) => {
                       fontWeight: 'bold'
                     }}
                   />
-
-
 
                   <GenericButton
                     title="refund"
