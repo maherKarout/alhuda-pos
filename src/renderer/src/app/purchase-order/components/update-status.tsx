@@ -34,6 +34,8 @@ function UpdatePurchaseOrderStatus({
   const { t } = useTranslation('translation')
   const [status, setStatus] = useState<string>(currentStatus)
   const [updateStatus, { isLoading }] = useUpdatePurchaseOrderStatusMutation()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  console.log('🚀 ~ UpdatePurchaseOrderStatus ~ isMenuOpen:', isMenuOpen)
 
   useEffect(() => {
     setStatus(currentStatus)
@@ -132,6 +134,9 @@ function UpdatePurchaseOrderStatus({
           value={status}
           onChange={handleStatusChange}
           disabled={isLoading || allowEdit}
+          onOpen={(e) => {
+            setIsMenuOpen(!!e)
+          }}
           sx={{
             '& .MuiSelect-select': {
               padding: 0,
@@ -222,81 +227,86 @@ function UpdatePurchaseOrderStatus({
               </Box>
             </Box>
           </MenuItem>
-          <MenuItem value={PurchaseStatus.SENT}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1 }}>
-              <Box
-                sx={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
-                  backgroundColor: '#e8f5e8',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <LocalShippingIcon sx={{ color: '#4CAF50', fontSize: 18 }} />
-              </Box>
-              <Box>
-                <Typography variant="body1" fontWeight={600}>
-                  {t('Sent')}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  {t('Order has been sent')}
-                </Typography>
-              </Box>
-            </Box>
-          </MenuItem>
-          <MenuItem value={PurchaseStatus.DELIVERED}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1 }}>
-              <Box
-                sx={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
-                  backgroundColor: '#e8f5e8',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <LocalShippingIcon sx={{ color: '#4CAF50', fontSize: 18 }} />
-              </Box>
-              <Box>
-                <Typography variant="body1" fontWeight={600}>
-                  {t('Delivered')}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  {t('Order has been delivered')}
-                </Typography>
-              </Box>
-            </Box>
-          </MenuItem>
-          <MenuItem value={PurchaseStatus.REFUNDED}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1 }}>
-              <Box
-                sx={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: '50%',
-                  backgroundColor: '#ffebee',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <CancelIcon sx={{ color: '#f44336', fontSize: 18 }} />
-              </Box>
-              <Box>
-                <Typography variant="body1" fontWeight={600}>
-                  {t('Refunded')}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  {t('Order has been refunded')}
-                </Typography>
-              </Box>
-            </Box>
-          </MenuItem>
+
+          {!isMenuOpen && (
+            <>
+              <MenuItem value={PurchaseStatus.SENT}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1 }}>
+                  <Box
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      backgroundColor: '#e8f5e8',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <LocalShippingIcon sx={{ color: '#4CAF50', fontSize: 18 }} />
+                  </Box>
+                  <Box>
+                    <Typography variant="body1" fontWeight={600}>
+                      {t('Sent')}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {t('Order has been sent')}
+                    </Typography>
+                  </Box>
+                </Box>
+              </MenuItem>
+              <MenuItem value={PurchaseStatus.DELIVERED}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1 }}>
+                  <Box
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      backgroundColor: '#e8f5e8',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <LocalShippingIcon sx={{ color: '#4CAF50', fontSize: 18 }} />
+                  </Box>
+                  <Box>
+                    <Typography variant="body1" fontWeight={600}>
+                      {t('Delivered')}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {t('Order has been delivered')}
+                    </Typography>
+                  </Box>
+                </Box>
+              </MenuItem>
+              <MenuItem value={PurchaseStatus.REFUNDED}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1 }}>
+                  <Box
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      backgroundColor: '#ffebee',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <CancelIcon sx={{ color: '#f44336', fontSize: 18 }} />
+                  </Box>
+                  <Box>
+                    <Typography variant="body1" fontWeight={600}>
+                      {t('Refunded')}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {t('Order has been refunded')}
+                    </Typography>
+                  </Box>
+                </Box>
+              </MenuItem>
+            </>
+          )}
         </Select>
       </FormControl>
     </Box>
