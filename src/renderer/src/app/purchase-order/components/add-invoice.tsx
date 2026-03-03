@@ -22,7 +22,12 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import usePurchaseOrder from '../hooks/use-purchase-order'
-import { useAddAdminPurchaseOrderMutation, useAddPurchaseOrderMutation, useUpdateAdminPurchaseOrderMutation, useUpdatePurchaseOrderMutation } from '../services/api'
+import {
+  useAddAdminPurchaseOrderMutation,
+  useAddPurchaseOrderMutation,
+  useUpdateAdminPurchaseOrderMutation,
+  useUpdatePurchaseOrderMutation
+} from '../services/api'
 import calcTotalAmount from '../utils/calc-total-amount'
 import { paginationStringConcatenation } from '@renderer/helpers/pagination-string-concatenation'
 import { routeName } from '@renderer/shared/routeName'
@@ -68,14 +73,13 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
   })
   const { subtotal, taxAmount, discountAmount, totalAmount } = orderCalculation
 
-
   // ====================== Check if he can update the order ======================
   const allowedStatusesForCasher = [PurchaseStatus.UNDER_PROCESS, PurchaseStatus.SENT]
   const allowedStatusesForAdmin = [PurchaseStatus.UNDER_PROCESS, PurchaseStatus.IN_PROGRESS]
 
   const canUpdateOrder = () => {
     if (isJustForReview) return false
-
+    if (!orders[currentOrder]?.status) return true
     if (forAdmin) {
       return allowedStatusesForAdmin.includes(orders[currentOrder]?.status as PurchaseStatus)
     } else {
@@ -155,14 +159,18 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
       newOrders[currentOrder] = { ...newOrders[currentOrder], items: [] }
       return newOrders
     })
-    navigateTo(paginationStringConcatenation(forAdmin ? routeName.ADMIN_PURCHASE_ORDER : routeName.ALL_PURCHASE_ORDER))
+    navigateTo(
+      paginationStringConcatenation(
+        forAdmin ? routeName.ADMIN_PURCHASE_ORDER : routeName.ALL_PURCHASE_ORDER
+      )
+    )
   }
 
   // ======================== On confirm ======================== //
   const onConfirm = () => {
     if (!setOrders || currentOrder === undefined) return
 
-    let funcOrder: any;
+    let funcOrder: any
     if (forAdmin) {
       if (isUpdateOrder) {
         funcOrder = updatePurchaseOrderForAdmin
@@ -193,7 +201,11 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
             ? t('Purchase order updated successfully')
             : t('Purchase order added successfully')
         )
-        navigate(paginationStringConcatenation(forAdmin ? routeName.ADMIN_PURCHASE_ORDER : routeName.ALL_PURCHASE_ORDER))
+        navigate(
+          paginationStringConcatenation(
+            forAdmin ? routeName.ADMIN_PURCHASE_ORDER : routeName.ALL_PURCHASE_ORDER
+          )
+        )
       })
   }
   return (
@@ -205,7 +217,9 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
         // border: '1px solid #dadce0',
         borderTopLeftRadius: currentOrder === 0 ? '0' : '8px'
       }}
-    >      <CardContent sx={{ flex: 1, padding: 3 }}>
+    >
+      {' '}
+      <CardContent sx={{ flex: 1, padding: 3 }}>
         <Stack
           direction="column"
           justifyContent={'space-between'}
@@ -220,8 +234,7 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
               sx={{ marginBottom: 3 }}
             >
               <Typography variant="h5" fontWeight="bold">
-                {t('bill_number')}:
-                {orders[currentOrder]?.billNumber}
+                {t('bill_number')}:{orders[currentOrder]?.billNumber}
               </Typography>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <CalendarIcon sx={{ color: 'primary.main', fontSize: 20 }} />
@@ -230,20 +243,24 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
                 </Typography>
               </Stack>
             </Stack>
-            <Stack direction="row" sx={{ marginBottom: "20px" }} spacing={0.5}>
+            <Stack direction="row" sx={{ marginBottom: '20px' }} spacing={0.5}>
               <Typography>طلبية من فرع </Typography>
-              <Typography variant='h5' sx={{ fontWeight: "bold" }}>{orders[currentOrder]?.branch}</Typography>
-              {orders[currentOrder]?.customerName && <>
-                <Typography>للزبون </Typography>
-                <Typography variant='h5'>{orders[currentOrder]?.customerName}</Typography></>
-              }
+              <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                {orders[currentOrder]?.branch}
+              </Typography>
+              {orders[currentOrder]?.customerName && (
+                <>
+                  <Typography>للزبون </Typography>
+                  <Typography variant="h5">{orders[currentOrder]?.customerName}</Typography>
+                </>
+              )}
             </Stack>
 
             {/* Cart Items Section */}
             {/* <Typography variant="h6" fontWeight="bold" sx={{ marginBottom: 2 }}>
               {t('Cart Items')}
             </Typography> */}
-            {false && (  // TODO: remove this after testing 
+            {false && ( // TODO: remove this after testing
               <BranchesField
                 branches={branchesData?.data}
                 onBranchSelect={(e) => {
@@ -259,7 +276,7 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
             {/* Cart Items Header */}
             <Stack direction="row" justifyContent="space-between" sx={{ marginBottom: 2 }}>
               <Typography variant="body2" fontWeight="bold" color="text.secondary" sx={{ flex: 2 }}>
-                {t("Items")}
+                {t('Items')}
               </Typography>
               <Typography
                 variant="body2"
@@ -432,7 +449,6 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
                       {(item.price * item.quantity).toLocaleString()}
                     </Typography>
 
-
                     <IconButton
                       size="small"
                       onClick={() => handleRemoveItem(item.id)}
@@ -493,45 +509,47 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
             </Box>
 
             {/* Action Buttons */}
-            {/* {!isJustForReview && canUpdateOrder() && <Stack direction="row" spacing={1}> */}
-            {canUpdateOrder() && <Stack direction="row" spacing={1}>
-              <Button
-                variant="contained"
-                onClick={onReset}
-                sx={{
-                  flex: 1,
-                  backgroundColor: 'error.main',
-                  color: 'white',
-                  textTransform: 'none',
-                  fontWeight: 'bold',
-                  '&:hover': { backgroundColor: 'error.dark' }
-                }}
-              >
-                {t('Reset')}
-              </Button>
+            {!isJustForReview && canUpdateOrder() && (
+              <Stack direction="row" spacing={1}>
+                {/* {canUpdateOrder() && <Stack direction="row" spacing={1}> */}
+                <Button
+                  variant="contained"
+                  onClick={onReset}
+                  sx={{
+                    flex: 1,
+                    backgroundColor: 'error.main',
+                    color: 'white',
+                    textTransform: 'none',
+                    fontWeight: 'bold',
+                    '&:hover': { backgroundColor: 'error.dark' }
+                  }}
+                >
+                  {t('Reset')}
+                </Button>
 
-              <Button
-                variant="contained"
-                onClick={onConfirm}
-                disabled={!isConfirmEnabled}
-                sx={{
-                  flex: 1,
-                  backgroundColor: isConfirmEnabled ? 'success.main' : 'grey.400',
-                  color: 'white',
-                  textTransform: 'none',
-                  fontWeight: 'bold',
-                  '&:hover': {
-                    backgroundColor: isConfirmEnabled ? 'success.dark' : 'grey.400'
-                  },
-                  '&:disabled': {
-                    backgroundColor: 'grey.400',
-                    color: 'white'
-                  }
-                }}
-              >
-                {t('Confirm')}
-              </Button>
-            </Stack>}
+                <Button
+                  variant="contained"
+                  onClick={onConfirm}
+                  disabled={!isConfirmEnabled}
+                  sx={{
+                    flex: 1,
+                    backgroundColor: isConfirmEnabled ? 'success.main' : 'grey.400',
+                    color: 'white',
+                    textTransform: 'none',
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: isConfirmEnabled ? 'success.dark' : 'grey.400'
+                    },
+                    '&:disabled': {
+                      backgroundColor: 'grey.400',
+                      color: 'white'
+                    }
+                  }}
+                >
+                  {t('Confirm')}
+                </Button>
+              </Stack>
+            )}
           </div>
         </Stack>
       </CardContent>

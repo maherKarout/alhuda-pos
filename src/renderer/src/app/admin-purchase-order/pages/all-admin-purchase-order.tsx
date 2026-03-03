@@ -46,7 +46,7 @@ function AllAdminPurchaseOrder({ canEdit, canDelete }: ComponentPropsType) {
       account: data.account,
       numberOfItems: data.numberOfItems,
       createdAt: <DateFormattedCell date={data.createdAt} format="DD/MM/YYYY HH:mm" />,
-      status: <UpdatePurchaseOrderStatus purchaseOrderId={data.id} currentStatus={data.status} />,
+      status: <UpdatePurchaseOrderStatus purchaseOrderId={data.id} currentStatus={data.status} allowEdit={false} />,
       billNumber: data.billNumber ?? "---"
     }
   }

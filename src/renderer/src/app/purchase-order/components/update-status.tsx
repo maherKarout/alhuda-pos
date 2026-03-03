@@ -21,9 +21,16 @@ type Props = {
   purchaseOrderId: string
   currentStatus: string
   onStatusUpdated?: () => void
+  allowEdit?: boolean
 }
 
-function UpdatePurchaseOrderStatus({ purchaseOrderId, currentStatus, onStatusUpdated }: Props) {
+function UpdatePurchaseOrderStatus({
+  purchaseOrderId,
+  currentStatus,
+  onStatusUpdated,
+  allowEdit = true
+}: Props) {
+  console.log('🚀 ~ UpdatePurchaseOrderStatus ~ allowEdit:', allowEdit)
   const { t } = useTranslation('translation')
   const [status, setStatus] = useState<string>(currentStatus)
   const [updateStatus, { isLoading }] = useUpdatePurchaseOrderStatusMutation()
@@ -124,7 +131,7 @@ function UpdatePurchaseOrderStatus({ purchaseOrderId, currentStatus, onStatusUpd
         <Select
           value={status}
           onChange={handleStatusChange}
-          disabled={isLoading}
+          disabled={isLoading || allowEdit}
           sx={{
             '& .MuiSelect-select': {
               padding: 0,
