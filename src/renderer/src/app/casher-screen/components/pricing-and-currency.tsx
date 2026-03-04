@@ -72,11 +72,14 @@ function PricingAndCurrency() {
 
   // Get total amount from order context using utility function
   const items = orders[currentOrder]?.items || []
-  const totalAmount = getTotalAmountForOrder(items, {
+
+  const mainTotalAmount = getTotalAmountForOrder(items, {
     taxAmount: 0, // Auto tax (fixed amount)
     discountType: discount?.type,
     discountAmount: discount?.amount
   })
+
+  const totalAmount = roundToNearest(mainTotalAmount, approximation)
   // ====================== Is Customer Order ======================
   const isCustomerOrder = orders[currentOrder]?.type === TypeOrder.RESERVATION
 
@@ -349,7 +352,7 @@ function PricingAndCurrency() {
                 color="primary.main"
                 sx={{ fontSize: '2.2rem' }}
               >
-                {baseCurrency.label} {totalAmount.toLocaleString()}
+                {baseCurrency.label} {mainTotalAmount.toLocaleString()}
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 0, fontSize: '2.2rem' }}>

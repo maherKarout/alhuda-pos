@@ -5,6 +5,8 @@ import useCasherScreen from './use-casher-screen'
 import useGetCustomers from './use-get-customers'
 import calcTotalAmount from '../utils/calc-total-amount'
 import type { InvoiceData } from '../components/pdf/generate-invoice-pdf'
+import { useGetConfigForPosQuery } from '@renderer/app/config'
+import { roundToNearest } from '../components/helper/round-to-nearset'
 
 interface InvoiceLabels {
   companyName: string
@@ -38,6 +40,10 @@ function useInvoiceData(): UseInvoiceDataReturn {
   const { t } = useTranslation('translation')
   const pos = useAppSelector((state: RootState) => state?.auth?.account?.pos)
   const account = useAppSelector((state: RootState) => state?.auth?.account)
+  // ====================== Get approximation ======================
+  const { data: configData } = useGetConfigForPosQuery()
+  const approximation = configData?.approximationRatio || 0
+
   const accountName = account?.fullName ?? account?.username
   // Get order data from casher screen context
   const { orders, currentOrder, ResponseInvoiceDetails, discount } = useCasherScreen()
@@ -87,7 +93,8 @@ function useInvoiceData(): UseInvoiceDataReturn {
     discount: orders[currentOrder]?.orderDiscount ?? 0,
     discountPercentage: 0, // Will be updated when discount is implemented
     tax: orderCalculation.taxAmount,
-    total: orderCalculation.totalAmount,
+    total: roundToNearest(+orderCalculation.totalAmount, approximation),
+    mainTotal: orderCalculation.totalAmount,
     balance: ResponseInvoiceDetails.current?.customerBalance || 0
   }
 

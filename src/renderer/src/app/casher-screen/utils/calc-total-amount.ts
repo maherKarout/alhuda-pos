@@ -45,7 +45,8 @@ export function calcTotalAmount(
   // }
 
   // Calculate total amount
-  const totalAmount = subtotal + finalTaxAmount - calculatedDiscountAmount
+  // const totalAmount = subtotal + finalTaxAmount - calculatedDiscountAmount
+  const totalAmount = subtotal + finalTaxAmount
 
   return {
     subtotal,

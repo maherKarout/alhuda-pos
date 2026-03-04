@@ -120,6 +120,36 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // To align 'x' and number
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  // ====================== new styles for total price with discount ======================
+  container: {
+    display: 'flex',
+    flexDirection: 'row-reverse', // RTL
+    alignItems: 'center',
+    gap: 8,
+  },
+  priceAfterDiscount: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#000000',
+  },
+  originalPriceContainer: {
+    position: 'relative',
+    marginLeft: 8,
+  },
+  originalPrice: {
+    fontSize: 12,
+    color: '#666666',
+  },
+  // خط أحمر (كعنصر منفصل)
+  lineThrough: {
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    right: 0,
+    height: 2,
+    backgroundColor: 'red',
+    marginTop: -1, // لتوسيط الخط
   }
 })
 
@@ -142,6 +172,7 @@ export interface InvoiceData {
   discountPercentage?: number
   tax: number
   total: number
+  mainTotal: number
   balance: number
 }
 
@@ -306,12 +337,28 @@ const InvoicePdfFile = ({ data, labels }: InvoicePdfProps) => {
             <Text style={{ width: '50%', textAlign: 'left', fontSize: 9 }}>
               {priceToDecimalPrice(formatAmount(invoiceData.discount))}
             </Text>
-            <Text style={{ width: '50%', textAlign: 'right', fontSize: 9, fontWeight: 'bold' }}>
+            {/* <Text style={{ width: '50%', textAlign: 'right', fontSize: 9, fontWeight: 'bold' }}>
               {invoiceData.discountPrefix}
               {(invoiceData.discountPercentage ?? 0) > 0
                 ? `(-${invoiceData.discountPercentage}%)`
                 : ''}
-            </Text>
+            </Text> */}
+
+// في المكون
+            <View style={styles.container}>
+              <Text style={styles.priceAfterDiscount}>
+                {priceToDecimalPrice(formatAmount(invoiceData.total - invoiceData.discount))}
+              </Text>
+
+              {invoiceData.mainTotal > invoiceData.total && (
+                <View style={styles.originalPriceContainer}>
+                  <Text style={styles.originalPrice}>
+                    {priceToDecimalPrice(formatAmount(invoiceData.mainTotal))}
+                  </Text>
+                  <View style={styles.lineThrough} />
+                </View>
+              )}
+            </View>
           </View>
 
           {/* Tax (if uncommented) */}

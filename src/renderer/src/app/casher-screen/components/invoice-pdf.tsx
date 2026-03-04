@@ -8,6 +8,8 @@ import calcTotalAmount from '../utils/calc-total-amount'
 import useGetCustomers from '../hooks/use-get-customers'
 import { useTranslation } from 'react-i18next'
 import { priceToDecimalPrice } from '@renderer/helpers/price-to-decimal-price'
+import { roundToNearest } from './helper/round-to-nearset'
+import { useGetConfigForPosQuery } from '@renderer/app/config'
 
 interface InvoiceItem {
   name: string
@@ -19,6 +21,10 @@ const InvoicePdf = () => {
   const { t } = useTranslation('translation')
   const pos = useAppSelector((state: RootState) => state?.auth?.account?.pos)
   const account = useAppSelector((state: RootState) => state?.auth?.account)
+
+  const { data: configData } = useGetConfigForPosQuery()
+  const approximation = configData?.approximationRatio || 0
+
   const accountName = account?.fullName ?? account?.username
 
   // Get order data from casher screen context
@@ -79,7 +85,8 @@ const InvoicePdf = () => {
     discount: orders[currentOrder]?.orderDiscount ?? 0,
     discountPercentage: 0, // Will be updated when discount is implemented
     tax: orderCalculation.taxAmount,
-    total: orderCalculation.totalAmount,
+    total: roundToNearest(+orderCalculation.totalAmount, approximation),
+    mainTotal: orderCalculation.totalAmount,
     balance: ResponseInvoiceDetails.current?.customerBalance, // This would be calculated based on payment received
 
     // UI Settings
@@ -110,6 +117,7 @@ const InvoicePdf = () => {
     orderDiscountLabel: t('Order Discount'),
     printDateLabel: t('Print Date')
   }
+  console.log("🚀 ~ InvoicePdf ~ invoiceData:", invoiceData)
   const formatAmount = (amount: number) => {
     return amount.toFixed(2)
   }
@@ -316,12 +324,39 @@ const InvoicePdf = () => {
             >
               {invoiceData.totalLabel}
             </Typography>
-            <Typography
+            {/* <Typography
               variant="body1"
               sx={{ fontSize: '14px', fontWeight: 'bold', color: 'black' }}
             >
               {priceToDecimalPrice(formatAmount(invoiceData.total - invoiceData.discount))}
-            </Typography>
+            </Typography> */}
+            
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, direction: 'rtl' }}>
+              {/* السعر بعد الخصم */}
+              <Typography
+                variant="body1"
+                sx={{ fontSize: '14px', fontWeight: 'bold', color: 'black' }}
+              >
+                {priceToDecimalPrice(formatAmount(invoiceData.total - invoiceData.discount))}
+              </Typography>
+
+              {/* إذا كان السعر الأصلي أكبر من السعر بعد الخصم، نعرض السعر الأصلي مشطوب */}
+              {invoiceData.mainTotal > invoiceData.total && (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: '12px',
+                    color: 'text.secondary',
+                    textDecoration: 'line-through',
+                    textDecorationColor: 'red',
+                    textDecorationThickness: '2px',
+                    ml: 1
+                  }}
+                >
+                  {priceToDecimalPrice(formatAmount(invoiceData.mainTotal))}
+                </Typography>
+              )}
+            </Box>
           </Box>
 
           {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
