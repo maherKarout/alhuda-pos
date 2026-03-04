@@ -135,8 +135,8 @@ function AddCustomers() {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
-      isError={isError}
-      loading={isLoading}
+      isError={false}
+      loading={false}
     />
   )
 }

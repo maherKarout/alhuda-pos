@@ -537,5 +537,7 @@
   "go_to_casher_login": "تسجيل الدخول ككاشير",
   "Total Cash(N-SYP)": " الأجمالي (ل.س الجديدة)",
   "Are you sure you want to proceed?": "هل أنت متأكد من أنك تريد المتابعة؟",
-  "Confirm sale operation": "تأكيد عملية البيع"
+  "Confirm sale operation": "تأكيد عملية البيع",
+  "Total Purchase Price": "اجمالي سعر المشتريات",
+  "Customer name already exists": "اسم العميل موجود بالفعل"
 }

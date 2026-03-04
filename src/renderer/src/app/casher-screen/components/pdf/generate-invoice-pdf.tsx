@@ -337,28 +337,14 @@ const InvoicePdfFile = ({ data, labels }: InvoicePdfProps) => {
             <Text style={{ width: '50%', textAlign: 'left', fontSize: 9 }}>
               {priceToDecimalPrice(formatAmount(invoiceData.discount))}
             </Text>
-            {/* <Text style={{ width: '50%', textAlign: 'right', fontSize: 9, fontWeight: 'bold' }}>
+            <Text style={{ width: '50%', textAlign: 'right', fontSize: 9, fontWeight: 'bold' }}>
               {invoiceData.discountPrefix}
               {(invoiceData.discountPercentage ?? 0) > 0
                 ? `(-${invoiceData.discountPercentage}%)`
                 : ''}
-            </Text> */}
+            </Text>
 
-// في المكون
-            <View style={styles.container}>
-              <Text style={styles.priceAfterDiscount}>
-                {priceToDecimalPrice(formatAmount(invoiceData.total - invoiceData.discount))}
-              </Text>
 
-              {invoiceData.mainTotal > invoiceData.total && (
-                <View style={styles.originalPriceContainer}>
-                  <Text style={styles.originalPrice}>
-                    {priceToDecimalPrice(formatAmount(invoiceData.mainTotal))}
-                  </Text>
-                  <View style={styles.lineThrough} />
-                </View>
-              )}
-            </View>
           </View>
 
           {/* Tax (if uncommented) */}
@@ -372,12 +358,35 @@ const InvoicePdfFile = ({ data, labels }: InvoicePdfProps) => {
         {/* Divider */}
         <View style={styles.divider} />
         {/* Total */}
-        <View style={styles.totalRow}>
+        {/* <View style={styles.totalRow}>
           <Text style={{ ...styles.amountText, fontWeight: 'bold' }}>
             {priceToDecimalPrice(formatAmount(invoiceData.total - invoiceData.discount))}
           </Text>
           <Text style={{ ...styles.labelText, fontWeight: 'bold' }}>{invoiceData.totalLabel}</Text>
+        </View> */}
+
+
+
+// في المكون
+        <View style={styles.container}>
+          <Text style={{ ...styles.labelText, fontWeight: 'bold' }}>{invoiceData.totalLabel}</Text>
+
+          {invoiceData.mainTotal > invoiceData.total && (
+            <View style={styles.originalPriceContainer}>
+              <Text style={styles.originalPrice}>
+                {priceToDecimalPrice(formatAmount(invoiceData.mainTotal))}
+              </Text>
+              <View style={styles.lineThrough} />
+            </View>
+          )}
+          <Text style={{ ...styles.amountText, fontWeight: 'bold' }}>
+            {priceToDecimalPrice(formatAmount(invoiceData.total - invoiceData.discount))}
+          </Text>
         </View>
+
+
+
+
         {/* Balance/Change */}
         {/* <View style={styles.totalRow}>
           <Text style={{ ...styles.amountText, fontWeight: 'bold' }}>

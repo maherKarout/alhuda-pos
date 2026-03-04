@@ -31,6 +31,7 @@ export type TResponseInvoiceById = {
     disc?: number
     guid: string
     openPrice?: boolean
+    itemNote?: string
   }[]
   payments: any[]
   subTotal: number

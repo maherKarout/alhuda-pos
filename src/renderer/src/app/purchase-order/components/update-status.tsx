@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { PurchaseStatus } from '@renderer/consts'
-import { useUpdatePurchaseOrderStatusMutation } from '../services/api'
+import { useUpdateAdminPurchaseOrderStatusMutation, useUpdatePurchaseOrderStatusMutation } from '../services/api'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import PendingIcon from '@mui/icons-material/Pending'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
@@ -22,18 +22,21 @@ type Props = {
   currentStatus: string
   onStatusUpdated?: () => void
   allowEdit?: boolean
+  isForAdmin?: boolean
 }
 
 function UpdatePurchaseOrderStatus({
   purchaseOrderId,
   currentStatus,
   onStatusUpdated,
-  allowEdit = true
+  allowEdit = true,
+  isForAdmin = false
 }: Props) {
   console.log('🚀 ~ UpdatePurchaseOrderStatus ~ allowEdit:', allowEdit)
   const { t } = useTranslation('translation')
   const [status, setStatus] = useState<string>(currentStatus)
   const [updateStatus, { isLoading }] = useUpdatePurchaseOrderStatusMutation()
+  const [updateAdminStatus, { isLoading: isLoadingAdmin }] = useUpdateAdminPurchaseOrderStatusMutation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   console.log('🚀 ~ UpdatePurchaseOrderStatus ~ isMenuOpen:', isMenuOpen)
 
@@ -46,7 +49,7 @@ function UpdatePurchaseOrderStatus({
     setStatus(newStatus)
 
     try {
-      await updateStatus({
+      await (isForAdmin ? updateAdminStatus : updateStatus)({
         id: purchaseOrderId,
         status: newStatus
       }).unwrap()

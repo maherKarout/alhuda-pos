@@ -22,7 +22,8 @@ const errorCode: any = {
   '50007': 'access token expired',
   '50005': 'access token expired',
   '4024': 'You are not registered as a pos for this branch',
-  '140000': 'Product not found'
+  '140000': 'Product not found',
+  "180003":"Customer name already exists"
 }
 
 export const getErrorMessageFromCode = (code: number | string) => {

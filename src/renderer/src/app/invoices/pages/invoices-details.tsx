@@ -25,6 +25,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import AuthorizedCheckWrapper, { ComponentPropsType } from 'src/components/authorized-check-wrapper'
 import { privilegeFeature } from 'src/shared/privileges'
 import { useGetInvoicesByIdQuery } from '../services/api'
+import BigTextPreview from '@renderer/components/dialog/big-text-preview'
 
 function InvoicesDetails({ canEdit }: ComponentPropsType) {
   const { t } = useTranslation('translation')
@@ -84,7 +85,7 @@ function InvoicesDetails({ canEdit }: ComponentPropsType) {
               />
             </Box>
           </Box>
-          <Button variant="outlined" startIcon={<Print />} onClick={() => {}}>
+          <Button variant="outlined" startIcon={<Print />} onClick={() => { }}>
             {t('Print Receipt')}
           </Button>
         </Box>
@@ -109,6 +110,17 @@ function InvoicesDetails({ canEdit }: ComponentPropsType) {
             <Typography variant="caption">{t('Customer Name')}</Typography>
             <Typography variant="body1" color="primary" fontWeight="bold">
               {invoicesData.customerName}
+            </Typography>
+          </Box>
+          {/* total price */}
+          <Box sx={{ minWidth: 200 }}>
+            <Typography variant="caption">{t('Total Purchase Price')}</Typography>
+            <Typography
+              variant="body1"
+              fontWeight="bold"
+              color={Number(invoicesData.subTotal ?? 0) > 0 ? 'success.main' : 'error.main'}
+            >
+              {invoicesData.subTotal ? invoicesData.subTotal.toLocaleString() : 0} SYP
             </Typography>
           </Box>
           {/* total payments */}
@@ -157,6 +169,7 @@ function InvoicesDetails({ canEdit }: ComponentPropsType) {
                     <TableCell align="center">{t('Unit Price')}</TableCell>
                     <TableCell align="center">{t('Disc')}</TableCell>
                     <TableCell align="center">{t('Subtotal')}</TableCell>
+                    <TableCell align="center">{t('notes')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -167,6 +180,7 @@ function InvoicesDetails({ canEdit }: ComponentPropsType) {
                       <TableCell align="center">{formatPrice(product.unitPrice)}</TableCell>
                       <TableCell align="center">{product?.disc?.toFixed(2)}</TableCell>
                       <TableCell align="center">{formatPrice(product?.subTotal ?? 0)}</TableCell>
+                      <TableCell align="center">{product?.itemNote&&<BigTextPreview text={product?.itemNote ?? ''} />}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

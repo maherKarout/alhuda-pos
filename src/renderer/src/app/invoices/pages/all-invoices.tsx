@@ -57,7 +57,7 @@ function AllInvoices({ canEdit, canDelete }: ComponentPropsType) {
     return {
       ...data,
       id: data.id,
-      date: <DateFormattedCell date={data.date} format="DD/MM/YYYY" />,
+      date: <DateFormattedCell date={data.date} format="DD/MM/YYYY (HH:mm A)" />,
       status: getStatusChip(data.status)
     }
   }

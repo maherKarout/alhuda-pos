@@ -13,7 +13,8 @@ import {
   Divider,
   IconButton,
   Stack,
-  Typography
+  Typography,
+  CircularProgress
 } from '@mui/material'
 import BranchesField from '@renderer/app/admin-purchase-order/components/branches-field'
 import { useGetAllBranchesWithoutPaginationQuery } from '@renderer/app/branches'
@@ -51,6 +52,7 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
   const { id: isUpdateOrder } = useParams()
 
   const [discount, setDiscount] = useState(0)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   // ====================== Hook RTK query ======================
   const [addPurchaseOrder] = useAddPurchaseOrderMutation()
   const [addPurchaseOrderForAdmin] = useAddAdminPurchaseOrderMutation()
@@ -185,6 +187,7 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
       }
     }
     // ====================== fun send data ======================
+    setIsSubmitting(true)
     funcOrder({
       items: items.map((item) => ({
         productGuid: item.id,
@@ -206,6 +209,9 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
             forAdmin ? routeName.ADMIN_PURCHASE_ORDER : routeName.ALL_PURCHASE_ORDER
           )
         )
+      })
+      .finally(() => {
+        setIsSubmitting(false)
       })
   }
   return (
@@ -530,15 +536,17 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
                 <Button
                   variant="contained"
                   onClick={onConfirm}
-                  disabled={!isConfirmEnabled}
+                  disabled={!isConfirmEnabled || isSubmitting}
                   sx={{
                     flex: 1,
-                    backgroundColor: isConfirmEnabled ? 'success.main' : 'grey.400',
+                    backgroundColor:
+                      isConfirmEnabled && !isSubmitting ? 'success.main' : 'grey.400',
                     color: 'white',
                     textTransform: 'none',
                     fontWeight: 'bold',
                     '&:hover': {
-                      backgroundColor: isConfirmEnabled ? 'success.dark' : 'grey.400'
+                      backgroundColor:
+                        isConfirmEnabled && !isSubmitting ? 'success.dark' : 'grey.400'
                     },
                     '&:disabled': {
                       backgroundColor: 'grey.400',
@@ -546,7 +554,11 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
                     }
                   }}
                 >
-                  {t('Confirm')}
+                  {isSubmitting ? (
+                    <CircularProgress size={20} sx={{ color: 'white' }} />
+                  ) : (
+                    t('Confirm')
+                  )}
                 </Button>
               </Stack>
             )}
