@@ -32,13 +32,11 @@ function UpdatePurchaseOrderStatus({
   allowEdit = true,
   isForAdmin = false
 }: Props) {
-  console.log('🚀 ~ UpdatePurchaseOrderStatus ~ allowEdit:', allowEdit)
   const { t } = useTranslation('translation')
   const [status, setStatus] = useState<string>(currentStatus)
   const [updateStatus, { isLoading }] = useUpdatePurchaseOrderStatusMutation()
   const [updateAdminStatus, { isLoading: isLoadingAdmin }] = useUpdateAdminPurchaseOrderStatusMutation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  console.log('🚀 ~ UpdatePurchaseOrderStatus ~ isMenuOpen:', isMenuOpen)
 
   useEffect(() => {
     setStatus(currentStatus)

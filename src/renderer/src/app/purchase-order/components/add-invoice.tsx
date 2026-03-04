@@ -346,9 +346,14 @@ const AddInvoice = ({ forAdmin, isJustForReview }: Props) => {
                           height: '24px'
                         }}
                       />
-                      <Typography variant="body2" fontWeight="500" sx={{ fontSize: '12px' }}>
-                        {item.name}
-                      </Typography>
+                      <Stack direction="column" spacing={0.5}>
+                        <Typography variant="body2" fontWeight="500" sx={{ fontSize: '12px' }}>
+                          {item.name}
+                        </Typography>
+                        {item.note && <Typography variant="caption" fontWeight="bold" sx={{ fontSize: '12px' }}>
+                          {t('Note')}: {item.note}
+                        </Typography>}
+                      </Stack>
                     </Stack>
 
                     {/* Quantity Controls */}

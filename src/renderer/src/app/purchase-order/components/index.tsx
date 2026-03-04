@@ -53,7 +53,7 @@ function PurchaseOrderForAdminAndCasher({ forAdmin, isJustForReview }: { forAdmi
               quantity: item.quantity,
               individualPrice: item.quantity > 0 ? (item.price || 0) / item.quantity : 0,
               openPrice: false,
-
+              note: item.itemNote
             }
           })
         }

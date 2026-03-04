@@ -13,6 +13,7 @@ type BodyPurchaseOrder = {
   items: {
     productGuid: string
     quantity: number
+    itemNote?: string
   }[]
   pos?: string
   id?: string
@@ -37,6 +38,7 @@ type TRPurchaseOrderDetails = {
     name: string
     price: number
     quantity: number
+    itemNote?: string
   }[]
 }
 

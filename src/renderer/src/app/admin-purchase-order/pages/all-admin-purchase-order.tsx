@@ -11,6 +11,7 @@ import UpdatePurchaseOrderStatus from '@renderer/app/purchase-order/components/u
 import { routeName } from '@renderer/shared/routeName'
 import { PurchaseStatus } from '@renderer/consts'
 import { useEffect } from 'react'
+import BigTextPreview from '@renderer/components/dialog/big-text-preview'
 
 function AllAdminPurchaseOrder({ canEdit, canDelete }: ComponentPropsType) {
   const { t } = useTranslation('translation')
@@ -37,7 +38,9 @@ function AllAdminPurchaseOrder({ canEdit, canDelete }: ComponentPropsType) {
     { key: 'branch', value: t('Branch') },
     { key: 'account', value: t('Account') },
     { key: 'createdAt', value: t('Created At') },
-    { key: 'status', value: t('Status') }
+    { key: 'status', value: t('Status') },
+    { key: 'notes', value: t('Notes') },
+
   ]
   const createData = (data) => {
     return {
@@ -46,7 +49,8 @@ function AllAdminPurchaseOrder({ canEdit, canDelete }: ComponentPropsType) {
       account: data.account,
       numberOfItems: data.numberOfItems,
       createdAt: <DateFormattedCell date={data.createdAt} format="DD/MM/YYYY HH:mm" />,
-      status: <UpdatePurchaseOrderStatus purchaseOrderId={data.id} currentStatus={data.status} allowEdit={false} isForAdmin/>,
+      status: <UpdatePurchaseOrderStatus purchaseOrderId={data.id} currentStatus={data.status} allowEdit={false} isForAdmin />,
+      notes: <BigTextPreview text={data.itemNote} />,
       billNumber: data.billNumber ?? "---"
     }
   }

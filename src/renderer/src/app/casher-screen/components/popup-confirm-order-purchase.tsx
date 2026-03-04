@@ -42,7 +42,8 @@ function PopupConfirmOrderPurchase({ open, setOpen, onReset, isRefundPurchaseOrd
       customer: customer ?? undefined,
       items: items.map((item) => ({
         productGuid: item.id,
-        quantity: item.quantity
+        quantity: item.quantity,
+        itemNote: item.note
       }))
     })
       .unwrap()
