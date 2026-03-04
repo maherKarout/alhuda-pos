@@ -94,7 +94,7 @@ const GenericButton = ({
           sx={{ p: 1.2, borderRadius: `${borderRadius.large}px`, minWidth: 'fit-content', ...sx }}
           {...props}
         >
-          {typeof title === 'string' ? t(title) : title}
+          {!loading && (typeof title === 'string' ? t(title) : title)}
           {loading ? <CircularProgress sx={{ mx: 3 }} color="inherit" size={28} /> : null}
         </Button>
       </ButtonGroup>

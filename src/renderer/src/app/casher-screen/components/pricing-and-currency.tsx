@@ -30,6 +30,7 @@ import {
 } from '@renderer/config/currencies'
 import { useAppSelector } from '@renderer/hooks/useAppSelector'
 import CurrencyInputField from './currency-input-field'
+import PopupConfirm from './popup-confirm'
 
 interface CurrencyCalculations {
   [key: string]: number // Dynamic: { syp: number, usd: number, ... }
@@ -63,6 +64,8 @@ function PricingAndCurrency() {
   const [getCasherBox] = useGetCasherBoxMutation()
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+  const [pendingOrderDiscount, setPendingOrderDiscount] = useState<number | undefined>(undefined)
 
   // Input states for dynamic columns - using Record to support all currencies
   const [amountReceived, setAmountReceived] =
@@ -181,7 +184,7 @@ function PricingAndCurrency() {
       })
 
       // For backward compatibility, ensure usd and syp are present
-      const amount: { usd: number; syp: number; [key: string]: number } = {
+      const amount: { usd: number; syp: number;[key: string]: number } = {
         usd: amountForAPI.usd || 0,
         syp: amountForAPI.syp || 0,
         ...amountForAPI
@@ -303,9 +306,27 @@ function PricingAndCurrency() {
       addOrder,
       addCustomerOrder,
       updateCustomerOrder,
-      addOrderCustomerInvoice
+      addOrderCustomerInvoice,
+      isServerOnline
     ]
   )
+
+  const handleOpenConfirm = (orderDiscount?: number) => {
+    setPendingOrderDiscount(orderDiscount)
+    setIsConfirmOpen(true)
+  }
+
+  const handleCloseConfirm = () => {
+    if (isSubmitting) return
+    setIsConfirmOpen(false)
+    setPendingOrderDiscount(undefined)
+  }
+
+  const handleConfirmPopup = () => {
+    handleConfirmSale(pendingOrderDiscount)
+    setIsConfirmOpen(false)
+    setPendingOrderDiscount(undefined)
+  }
 
   // Handle Enter key press
   // useEffect(() => {
@@ -452,7 +473,7 @@ function PricingAndCurrency() {
                         amountReceived[currency.code] === 0
                           ? ''
                           : priceToDecimalPrice(amountReceived[currency.code]?.toString() || '0') ||
-                            ''
+                          ''
                       }
                       onChange={(e) => {
                         const newValue = decimalPriceToNumber(e.target.value) || 0
@@ -631,9 +652,7 @@ function PricingAndCurrency() {
                   t(baseCurrency.label)
                 }
                 loading={!Boolean(hardDiscount) && isSubmitting}
-                onClick={() => handleConfirmSale(-calculations[baseCurrency.code])}
-                // disabled={calculations[baseCurrency.code] <= 0}
-                // disabled={isConfirmSaleDisabled}
+                onClick={() => handleOpenConfirm(-calculations[baseCurrency.code])}
                 disabled={
                   hardDiscount > 0 ||
                   Object.values(amountReceived).reduce((sum, val) => sum + val, 0) === 0 ||
@@ -647,7 +666,6 @@ function PricingAndCurrency() {
                   fontWeight: 'bold',
                   height: 48,
                   borderRadius: '5px',
-                  // height: 'auto',
                   '&:hover': {
                     backgroundColor: '#45a049'
                   }
@@ -656,11 +674,8 @@ function PricingAndCurrency() {
             )}
             <GenericButton
               title={titles.confirmSaleWithTransfer}
-              // loading={(Boolean(hardDiscount) || isCustomerOrder) && (isCustomerOrder ? isAddingCustomerOrder || isUpdatingCustomerOrder : isAddingOrder)}
               loading={(Boolean(hardDiscount) || isCustomerOrder) && isSubmitting}
-              onClick={() => handleConfirmSale(hardDiscount)}
-              // disabled={calculations.syp !== 0 && calculations.usd !== 0}
-              // disabled={isConfirmSaleDisabled}
+              onClick={() => handleOpenConfirm(hardDiscount)}
               sx={{
                 flex: 1,
                 backgroundColor: '#4CAF50',
@@ -669,15 +684,25 @@ function PricingAndCurrency() {
                 fontWeight: 'bold',
                 height: 48,
                 borderRadius: '5px',
-                // height: 'auto',
                 '&:hover': {
                   backgroundColor: '#45a049'
                 }
               }}
             />
           </Stack>
+          <PopupConfirm
+            open={isConfirmOpen}
+            title={t('Confirm sale operation')}
+            description={t('Are you sure you want to proceed?')}
+            confirmLabel={t('Confirm')}
+            cancelLabel={t('Cancel')}
+            loading={isSubmitting}
+            onConfirm={handleConfirmPopup}
+            onClose={handleCloseConfirm}
+          />
           {/* <Typography variant="body2" color="warning.main" sx={{ mb: 0, fontSize: '0.9rem', mx: "auto", textAlign: 'center', paddingBottom: "10px", marginTop: "0px" }}>{t('سوف يتم خصم الرقم الباقي من الفاتورة')}</Typography> */}
         </Stack>
+
       </CardContent>
     </Card>
   )

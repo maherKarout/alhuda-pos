@@ -374,7 +374,6 @@
   "orderNumber": "رقم الطلب",
   "USD": "دولار",
   "SYP": "ليرة سورية",
-
   "Are you sure you want to end your shift and hand over the register?": "هل أنت متأكد من أنك تريد إنهاء نوبتك وتسليم الصندوق؟",
   "Current SYP": "الليرة السورية الحالية",
   "Current USD": "الدولار الأمريكي الحالي",
@@ -533,8 +532,10 @@
   "shope_orders": "طلبات الصالات",
   "shope_invoices": "فواتير الصالات",
   "Payment has been made to": "تم تسديد الى",
-  "Confrim":"تأكيد",
-  "bill_number":" رقم الفاتورة ",
-  "go_to_casher_login":"تسجيل الدخول ككاشير",
-  "Total Cash(N-SYP)":" الأجمالي (ل.س الجديدة)"
+  "Confrim": "تأكيد",
+  "bill_number": " رقم الفاتورة ",
+  "go_to_casher_login": "تسجيل الدخول ككاشير",
+  "Total Cash(N-SYP)": " الأجمالي (ل.س الجديدة)",
+  "Are you sure you want to proceed?": "هل أنت متأكد من أنك تريد المتابعة؟",
+  "Confirm sale operation": "تأكيد عملية البيع"
 }
